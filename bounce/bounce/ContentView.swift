@@ -7,11 +7,11 @@ struct ContentView: View {
 
     var body: some View {
         VStack(alignment: .center) {
-            CreateDemoView()
+            CreateView(requestBuilder: DefaultSongLinkRequestFactory.self)
         }
     }
 }
 
 #Preview {
-    ContentView()
+    CreateView(requestBuilder: MockSongLinkRequestFactory.self)
 }

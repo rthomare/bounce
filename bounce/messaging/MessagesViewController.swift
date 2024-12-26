@@ -28,7 +28,7 @@ class MessagesViewController: MSMessagesAppViewController {
             self?.sendSongMessage(song)
         }
         
-        let swiftUIView = CreateView(requestBuilder: MockSongLinkRequestFactory.self, onSongModelGenerated: onSongModelGenerated)
+        let swiftUIView = CreateView(requestBuilder: DefaultSongLinkRequestFactory.self, onSongModelGenerated: onSongModelGenerated)
 
         // Embed the SwiftUI view in a UIHostingController
         let hostingController = UIHostingController(rootView: swiftUIView)
