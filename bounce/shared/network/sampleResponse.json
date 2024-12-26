@@ -1,0 +1,266 @@
+{
+  "entityUniqueId": "SPOTIFY_SONG::0Jcij1eWd5bDMU5iPbxe2i",
+  "userCountry": "US",
+  "pageUrl": "https://song.link/s/0Jcij1eWd5bDMU5iPbxe2i",
+  "entitiesByUniqueId": {
+    "AMAZON_SONG::B01NAE38YO": {
+      "id": "B01NAE38YO",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://m.media-amazon.com/images/I/418XoY1l0PL.jpg",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "amazon",
+      "platforms": [
+        "amazonMusic",
+        "amazonStore"
+      ]
+    },
+    "AUDIOMACK_SONG::17142069": {
+      "id": "17142069",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://assets.audiomack.com/kid-cudi/0f783119aa00d6bbade69c5f2f211d47a124b18809b8cce8aa1092d3c993112c.jpeg?width=500&height=500&max=true",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "audiomack",
+      "platforms": [
+        "audiomack"
+      ]
+    },
+    "ANGHAMI_SONG::18717979": {
+      "id": "18717979",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://artwork.anghcdn.co/cover/121457007/320",
+      "thumbnailWidth": 1024,
+      "thumbnailHeight": 1024,
+      "apiProvider": "anghami",
+      "platforms": [
+        "anghami"
+      ]
+    },
+    "BOOMPLAY_SONG::2639007": {
+      "id": "2639007",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://source.boomplaymusic.com/group10/M00/EC/4E/990e31179fe74d50857e2c53d44e2237_464_464.jpg",
+      "thumbnailWidth": 464,
+      "thumbnailHeight": 464,
+      "apiProvider": "boomplay",
+      "platforms": [
+        "boomplay"
+      ]
+    },
+    "DEEZER_SONG::138127073": {
+      "id": "138127073",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "http://cdn-images.dzcdn.net/images/cover/fdb6aec52b3e3ee75a47386a867e4c3b/500x500-000000-80-0-0.jpg",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "deezer",
+      "platforms": [
+        "deezer"
+      ]
+    },
+    "ITUNES_SONG::1440867832": {
+      "id": "1440867832",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/7b/ff/34/7bff3453-053a-3636-f76f-c9298807d3ca/16UMGIM77681.rgb.jpg/512x512bb.jpg",
+      "thumbnailWidth": 512,
+      "thumbnailHeight": 512,
+      "apiProvider": "itunes",
+      "platforms": [
+        "appleMusic",
+        "itunes"
+      ]
+    },
+    "NAPSTER_SONG::tra.246588040": {
+      "id": "tra.246588040",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://direct.rhapsody.com/imageserver/images/alb.246588025/385x385.jpeg",
+      "thumbnailWidth": 385,
+      "thumbnailHeight": 385,
+      "apiProvider": "napster",
+      "platforms": [
+        "napster"
+      ]
+    },
+    "PANDORA_SONG::TR:5791220": {
+      "id": "TR:5791220",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://content-images.p-cdn.com/images/f5/6a/46/24/4dae46468b3900fbfb553c2b/_500W_500H.jpg",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "pandora",
+      "platforms": [
+        "pandora"
+      ]
+    },
+    "SOUNDCLOUD_SONG::295653796": {
+      "id": "295653796",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://i1.sndcdn.com/artworks-PK2Y6Of8RDbs-0-t500x500.jpg",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "soundcloud",
+      "platforms": [
+        "soundcloud"
+      ]
+    },
+    "SPOTIFY_SONG::0Jcij1eWd5bDMU5iPbxe2i": {
+      "id": "0Jcij1eWd5bDMU5iPbxe2i",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://i.scdn.co/image/ab67616d0000b2735c8d9ad991d2a23eb039d8dd",
+      "thumbnailWidth": 640,
+      "thumbnailHeight": 640,
+      "apiProvider": "spotify",
+      "platforms": [
+        "spotify"
+      ]
+    },
+    "TIDAL_SONG::77623581": {
+      "id": "77623581",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://resources.tidal.com/images/1a1c1391/732d/4df1/90c0/b6f5b19ad1ca/640x640.jpg",
+      "thumbnailWidth": 640,
+      "thumbnailHeight": 640,
+      "apiProvider": "tidal",
+      "platforms": [
+        "tidal"
+      ]
+    },
+    "YANDEX_SONG::32504596": {
+      "id": "32504596",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi",
+      "thumbnailUrl": "https://avatars.yandex.net/get-music-content/2789402/2ce3bc1b.a.3962211-2/600x600",
+      "thumbnailWidth": 600,
+      "thumbnailHeight": 600,
+      "apiProvider": "yandex",
+      "platforms": [
+        "yandex"
+      ]
+    },
+    "YOUTUBE_VIDEO::w3LJ2bDvDJs": {
+      "id": "w3LJ2bDvDJs",
+      "type": "song",
+      "title": "Kitchen",
+      "artistName": "Kid Cudi - Topic",
+      "thumbnailUrl": "https://i.ytimg.com/vi/w3LJ2bDvDJs/hqdefault.jpg",
+      "thumbnailWidth": 480,
+      "thumbnailHeight": 360,
+      "apiProvider": "youtube",
+      "platforms": [
+        "youtube",
+        "youtubeMusic"
+      ]
+    }
+  },
+  "linksByPlatform": {
+    "amazonMusic": {
+      "country": "US",
+      "url": "https://music.amazon.com/albums/B01N48U32A?trackAsin=B01NAE38YO",
+      "entityUniqueId": "AMAZON_SONG::B01NAE38YO"
+    },
+    "amazonStore": {
+      "country": "US",
+      "url": "https://amazon.com/dp/B01NAE38YO",
+      "entityUniqueId": "AMAZON_SONG::B01NAE38YO"
+    },
+    "audiomack": {
+      "country": "US",
+      "url": "https://audiomack.com/song/kid-cudi/kitchen",
+      "entityUniqueId": "AUDIOMACK_SONG::17142069"
+    },
+    "anghami": {
+      "country": "US",
+      "url": "https://play.anghami.com/song/18717979?refer=linktree",
+      "entityUniqueId": "ANGHAMI_SONG::18717979"
+    },
+    "boomplay": {
+      "country": "US",
+      "url": "https://www.boomplay.com/songs/2639007",
+      "entityUniqueId": "BOOMPLAY_SONG::2639007"
+    },
+    "deezer": {
+      "country": "US",
+      "url": "https://www.deezer.com/track/138127073",
+      "entityUniqueId": "DEEZER_SONG::138127073"
+    },
+    "appleMusic": {
+      "country": "US",
+      "url": "https://geo.music.apple.com/us/album/_/1440866929?i=1440867832&mt=1&app=music&ls=1&at=1000lHKX&ct=api_http&itscg=30200&itsct=odsl_m",
+      "nativeAppUriMobile": "music://itunes.apple.com/us/album/_/1440866929?i=1440867832&mt=1&app=music&ls=1&at=1000lHKX&ct=api_uri_m&itscg=30200&itsct=odsl_m",
+      "nativeAppUriDesktop": "itmss://itunes.apple.com/us/album/_/1440866929?i=1440867832&mt=1&app=music&ls=1&at=1000lHKX&ct=api_uri_d&itscg=30200&itsct=odsl_m",
+      "entityUniqueId": "ITUNES_SONG::1440867832"
+    },
+    "itunes": {
+      "country": "US",
+      "url": "https://geo.music.apple.com/us/album/_/1440866929?i=1440867832&mt=1&app=itunes&ls=1&at=1000lHKX&ct=api_http&itscg=30200&itsct=odsl_m",
+      "nativeAppUriMobile": "itmss://itunes.apple.com/us/album/_/1440866929?i=1440867832&mt=1&app=itunes&ls=1&at=1000lHKX&ct=api_uri_m&itscg=30200&itsct=odsl_m",
+      "nativeAppUriDesktop": "itmss://itunes.apple.com/us/album/_/1440866929?i=1440867832&mt=1&app=itunes&ls=1&at=1000lHKX&ct=api_uri_d&itscg=30200&itsct=odsl_m",
+      "entityUniqueId": "ITUNES_SONG::1440867832"
+    },
+    "napster": {
+      "country": "US",
+      "url": "https://play.napster.com/track/tra.246588040",
+      "entityUniqueId": "NAPSTER_SONG::tra.246588040"
+    },
+    "pandora": {
+      "country": "US",
+      "url": "https://www.pandora.com/TR:5791220",
+      "entityUniqueId": "PANDORA_SONG::TR:5791220"
+    },
+    "soundcloud": {
+      "country": "US",
+      "url": "https://soundcloud.com/cudderland/kitchen",
+      "entityUniqueId": "SOUNDCLOUD_SONG::295653796"
+    },
+    "tidal": {
+      "country": "US",
+      "url": "https://listen.tidal.com/track/77623581",
+      "entityUniqueId": "TIDAL_SONG::77623581"
+    },
+    "yandex": {
+      "country": "RU",
+      "url": "https://music.yandex.ru/track/32504596",
+      "entityUniqueId": "YANDEX_SONG::32504596"
+    },
+    "youtube": {
+      "country": "US",
+      "url": "https://www.youtube.com/watch?v=w3LJ2bDvDJs",
+      "entityUniqueId": "YOUTUBE_VIDEO::w3LJ2bDvDJs"
+    },
+    "youtubeMusic": {
+      "country": "US",
+      "url": "https://music.youtube.com/watch?v=w3LJ2bDvDJs",
+      "entityUniqueId": "YOUTUBE_VIDEO::w3LJ2bDvDJs"
+    },
+    "spotify": {
+      "country": "US",
+      "url": "https://open.spotify.com/track/0Jcij1eWd5bDMU5iPbxe2i",
+      "nativeAppUriDesktop": "spotify:track:0Jcij1eWd5bDMU5iPbxe2i",
+      "entityUniqueId": "SPOTIFY_SONG::0Jcij1eWd5bDMU5iPbxe2i"
+    }
+  }
+}
