@@ -12,13 +12,14 @@ protocol CreateFlowListener: AnyObject {
 enum CreateFlowState {
     case initializing
     case idle
+    case detecting
     case loadingSong(link: URL, request: any SongLinkRequest)
     case songLoaded(song: Song, request: any SongLinkRequest)
     case loadError(error: Error, request: any SongLinkRequest)
 }
 
 enum CreateFlowActions {
-    case initalize
+    case startDetection
     case dectectedSongUrl(songUrl: URL)
     case didLoadSong(song: Song, request: any SongLinkRequest)
     case failedToLoadSong(error: Error, request: any SongLinkRequest)
@@ -54,27 +55,30 @@ class CreateFlowController: ObservableObject {
     // MARK: Private Methods
     
     private func _handleAction(_ action: CreateFlowActions) {
-        switch action {
-            case .initalize:
-                state = .idle
-                _detectSong()
-            case .dectectedSongUrl(songUrl: let url):
-                // Search if string is a service url
-                let request = _songLinkRequestFactory.build(songLink: url)
-                    .onLoading { songUrl, req  in
-                        self.state = .loadingSong(link: songUrl, request: req)
-                    }.onFailure { error, req in
-                        self._handleAction(.failedToLoadSong(error: error, request: req))
-                    }.onSuccess { songUrl, req in
-                        self._handleAction(.didLoadSong(song: songUrl, request: req))
-                    }
-                request.resume()
-            case .didLoadSong(song: let song, request: let request):
-                state = .songLoaded(song: song, request: request)
-            case .failedToLoadSong(error: let error, request: let request):
-                state = .loadError(error: error, request: request)
-            case .reset:
-                state = .idle
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            switch action {
+                case .startDetection:
+                    self.state = .detecting
+                    _detectSong()
+                case .dectectedSongUrl(songUrl: let url):
+                    // Search if string is a service url
+                    let request = _songLinkRequestFactory.build(songLink: url)
+                        .onLoading { songUrl, req  in
+                            self.state = .loadingSong(link: songUrl, request: req)
+                        }.onFailure { error, req in
+                            self._handleAction(.failedToLoadSong(error: error, request: req))
+                        }.onSuccess { songUrl, req in
+                            self._handleAction(.didLoadSong(song: songUrl, request: req))
+                        }
+                    request.resume()
+                case .didLoadSong(song: let song, request: let request):
+                    state = .songLoaded(song: song, request: request)
+                case .failedToLoadSong(error: let error, request: let request):
+                    state = .loadError(error: error, request: request)
+                case .reset:
+                    state = .idle
+            }
         }
     }
     
@@ -116,27 +120,31 @@ class CreateFlowController: ObservableObject {
     }
     
     // check the pasteboard if it is a url is a songs link then update the state
-    @objc private func _detectSong() {
-        if let pasteboard = UIPasteboard.general.string {
-            if let url = ServiceMatcher.matches(pasteboard) ? URL(string: pasteboard) : nil {
-                _handleAction(.dectectedSongUrl(songUrl: url))
-                return
-            }
-        }
-        
-        if let nowPlayingItem = _musicPlayer.nowPlayingItem {
-            _fetchMusic(nowPlayingItem: nowPlayingItem) { [weak self] result in
-                switch result {
-                case .success(let url):
-                    self?._handleAction(.dectectedSongUrl(songUrl: url))
-                case .failure:
-                    break
+    private func _detectSong() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: { [weak self] in
+            guard let self else { return }
+            if let pasteboard = UIPasteboard.general.string {
+                if let url = ServiceMatcher.matches(pasteboard) ? URL(string: pasteboard) : nil {
+                    self._handleAction(.dectectedSongUrl(songUrl: url))
+                    return
                 }
             }
-        }
+            
+            if let nowPlayingItem = self._musicPlayer.nowPlayingItem {
+                self._fetchMusic(nowPlayingItem: nowPlayingItem) { [weak self] result in
+                    guard let self else { return }
+                    switch result {
+                    case .success(let url):
+                        self._handleAction(.dectectedSongUrl(songUrl: url))
+                        return
+                    case .failure:
+                        break
+                    }
+                }
+            }
+            self.reset()
+        })
     }
-    
-    // MARK: Public Methods
     
     private func _start(hasMusicPermission: Bool) {
         if (hasMusicPermission) {
@@ -144,23 +152,25 @@ class CreateFlowController: ObservableObject {
             // Start observing notifications
             NotificationCenter.default.addObserver(
                 self,
-                selector: #selector(_detectSong),
+                selector: #selector(detectSong),
                 name: .MPMusicPlayerControllerNowPlayingItemDidChange,
                 object: _musicPlayer
             )
             
             NotificationCenter.default.addObserver(
                 self,
-                selector: #selector(_detectSong),
+                selector: #selector(detectSong),
                 name: .MPMusicPlayerControllerPlaybackStateDidChange,
                 object: _musicPlayer
             )
         }
         
-        _notificationCenter.addObserver(self, selector: #selector(_detectSong), name: UIPasteboard.changedNotification, object: nil)
-        _notificationCenter.addObserver(self, selector: #selector(_detectSong), name: UIPasteboard.removedNotification, object: nil)
-        _handleAction(.initalize)
+        _notificationCenter.addObserver(self, selector: #selector(detectSong), name: UIPasteboard.changedNotification, object: nil)
+        _notificationCenter.addObserver(self, selector: #selector(detectSong), name: UIPasteboard.removedNotification, object: nil)
+        _handleAction(.startDetection)
     }
+    
+    // MARK: Public Methods
     
     func initialize() {
         MPMediaLibrary.requestAuthorization { [weak self] status in
@@ -176,22 +186,26 @@ class CreateFlowController: ObservableObject {
         }
     }
     
-    // trigger a fetch of the song matches
-    func retry() {
-        switch state {
-        case .initializing, .idle, .loadingSong(link: _, request: _), .songLoaded(song: _, request: _):
-            // no need to retry in these states
-            break
-        case .loadError(error: _, request: let req):
-            self._handleAction(.dectectedSongUrl(songUrl: req.songLink))
-            break
-        }
+    @objc func detectSong() {
+        self._handleAction(.startDetection)
     }
     
     func rotateRandomSong() {
         // Select a random string from the array
         let rotatedURL = URL(string: songRotation.randomElement()!)!
         self._handleAction(.dectectedSongUrl(songUrl: rotatedURL))
+    }
+    
+    // trigger a fetch of the song matches
+    func retry() {
+        switch state {
+        case .initializing, .idle, .detecting, .loadingSong(link: _, request: _), .songLoaded(song: _, request: _):
+            // no need to retry in these states
+            break
+        case .loadError(error: _, request: let req):
+            self._handleAction(.dectectedSongUrl(songUrl: req.songLink))
+            break
+        }
     }
     
     func reset () {

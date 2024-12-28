@@ -8,9 +8,9 @@ struct CreateView: View {
     
     @ViewBuilder var content: some View {
         switch flowController.state {
-            case .initializing, .loadingSong:
+            case .initializing, .loadingSong, .detecting:
                     LoaderView(isLoading: true, speed: 1.5)
-        case .idle: InitialView(flowController: flowController)
+            case .idle: InitialView(flowController: flowController)
             case .songLoaded(song: let song, request: _):  SongLoadedView(song: song ).onTapGesture {_ in
                 if let songGenerated {
                     songGenerated(song)

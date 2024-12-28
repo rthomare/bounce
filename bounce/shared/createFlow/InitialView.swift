@@ -11,10 +11,17 @@ struct InitialView: View {
                 .font(.title)
                 .foregroundColor(Color.primary)
                 .fontWeight(.thin)
-            Text("or shake to sample")
-                .font(.footnote)
-                .foregroundColor(Color.primary)
-                .fontWeight(.medium)
+            HStack(spacing:4) {
+                Button("tap here to check", action: {
+                    flowController.detectSong()
+                })
+                    .font(.footnote)
+                    .fontWeight(.medium)
+                Text("or shake to sample")
+                    .font(.footnote)
+                    .foregroundColor(Color.primary)
+                    .fontWeight(.medium)
+            }
         }.background(
             ShakeDetector {
                 flowController.rotateRandomSong()
