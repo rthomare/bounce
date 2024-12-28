@@ -67,6 +67,5 @@ struct SongAbridged {
     let title: String
     let artistName: String
     let thumbnailUrl: String
-    let linksByPlatform: [String: PlatformLink]
+    let linkByPlatform: [PlatformIdentifier: String]
 }
-

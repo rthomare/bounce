@@ -8,6 +8,8 @@
 		<string>MainInterface</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.message-payload-provider</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>We need access to the microphone to recognize songs</string>
 	</dict>
 </dict>
 </plist>

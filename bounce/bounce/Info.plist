@@ -8,5 +8,7 @@
 	</array>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>We need this to detect and convert music songs on your behalf!</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to the microphone to recognize songs</string>
 </dict>
 </plist>

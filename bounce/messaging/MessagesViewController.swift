@@ -3,6 +3,7 @@
 import UIKit
 import Messages
 import SwiftUI
+import AVFoundation
 
 class MessagesViewController: MSMessagesAppViewController {
     var _hostingController: UIHostingController<CreateView>?
@@ -25,12 +26,11 @@ class MessagesViewController: MSMessagesAppViewController {
         
         // Create the SwiftUI view
         // Define the closure to handle song link creation
-        let onSongModelGenerated: (Song) -> Void = { [weak self] song in
-            self?.sendSongMessage(song)
+        let flowController = CreateFlowController(DefaultSongLinkRequestFactory.self) { [weak self] song in
+            guard let self else { return }
+            self.sendSongMessage(song)
         }
-        
-        let flowController = CreateFlowController(DefaultSongLinkRequestFactory.self)
-        let swiftUIView = CreateView(flowController: flowController, songGenerated: onSongModelGenerated)
+        let swiftUIView = CreateView(flowController: flowController)
 
         // Embed the SwiftUI view in a UIHostingController
         let hostingController = UIHostingController(rootView: swiftUIView)
@@ -52,6 +52,7 @@ class MessagesViewController: MSMessagesAppViewController {
 
         // Store the hosting controller for later use
         self._hostingController = hostingController
+        
     }
 
     // MARK: - Conversation Handling

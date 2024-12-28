@@ -31,6 +31,10 @@ struct SongEntityView: View {
                         .resizable()
                         .scaledToFill()
                         .clipped()
+                Rectangle()
+                    .frame(width: size, height: size)
+                    .background(Color.primary)
+                    .opacity(0.01)
                 HStack {
                     // Blur and Text Overlay
                     VStack(alignment:.leading, spacing: 4) {
@@ -38,22 +42,22 @@ struct SongEntityView: View {
                             .font(.headline)
                             .foregroundColor(.white)
                             .lineLimit(1)
-                            .shadow(radius: 1)
-                        
-                        Text(song.artistName)
+                        Text("By \(song.artistName)")
                             .font(.subheadline)
                             .foregroundColor(.white.opacity(0.9))
                             .lineLimit(1)
-                            .shadow(radius: 1)
                     }
                     .padding(10)
                     Spacer()
-                }
-                .background(BlurView())
+                }.background(
+                    BlurView()
+                        .background(Color.black.opacity(0.5))
+                )
             }
             .cornerRadius(16)
             .frame(width: size, height: size)
         }
+        .cornerRadius(16)
         .frame(maxWidth: .infinity, maxHeight: .infinity) // Prevent GeometryReader from taking extra space
         .aspectRatio(1, contentMode: .fit) // Maintain a square layout
     }
