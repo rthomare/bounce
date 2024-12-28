@@ -3,15 +3,25 @@
 import SwiftUI
 
 struct ErrorView: View {
+    var flowController: CreateFlowController
     var error: Error
     
     var body: some View {
-        Text("error")
+        Text("something went wrong")
             .font(.title)
             .foregroundColor(Color.primary)
             .fontWeight(.thin)
+        Button(action: {
+            flowController.retry()
+        }, label: {
+            Text("try again?")
+        })
+            .font(.subheadline)
+            .fontWeight(.medium)
     }
 }
 #Preview {
-    ErrorView(error: URLError(.badURL))
+    let flowController = CreateFlowController(MockSongLinkRequestFactory.self)
+
+    ErrorView(flowController: flowController, error: URLError(.badURL))
 }

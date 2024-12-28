@@ -30,13 +30,18 @@ func djb2Hash(_ input: String) -> Int {
 }
 
 struct SongLoadedView: View {
-    var song: SongModel
+    var song: Song
     
     var body: some View {
         // Map the hash value into the range of indices
         let index = djb2Hash(String(song.rawData.entityUniqueId)) % songPrompts.count
         VStack {
-            Text(songPrompts[index]).font(.title3).foregroundColor(.primary)
+            Text(songPrompts[index]).font(.title3) // Set your initial font size
+                .lineLimit(1) // Ensure the text stays on one line
+                .minimumScaleFactor(0.1) // Scale down to 10% of the original size if needed
+                .frame(maxWidth: .infinity, alignment: .center) // Limit the width of the text
+                .foregroundColor(.primary)
+                
             Text("tap to share, or copy another song").foregroundColor(.secondary)
             SongEntityView(song: song).padding(.vertical, 4)
         }
@@ -44,14 +49,14 @@ struct SongLoadedView: View {
 }
 
 struct PreviewSongLoaded: View {
-    @State var song: SongModel? = nil
+    @State var song: Song? = nil
     @State var isLoading = true
     @State var speed = 1.5
     @State var request = MockSongLinkRequestFactory.build(songLink: URL(filePath: "spotify:track:0Jcij1eWd5bDMU5iPbxe2i")!)
     
     var body: some View {
         if (song == nil) {
-            LoaderView(isLoading: $isLoading, speed: $speed).onAppear {
+            LoaderView(isLoading: isLoading, speed: speed).onAppear {
                 request = request.onSuccess { mockedSong, _ in
                     isLoading = false
                     song = mockedSong

@@ -4,7 +4,7 @@ import Foundation
 import Messages
 
 class MessageFactory {
-    static func buildSongMessage(_ song: SongModel) -> MSMessage? {
+    static func buildSongMessage(_ song: Song) -> MSMessage? {
         // Create a message URL with the song link data
         let queryItems = [
             URLQueryItem(name: "title", value: song.title),

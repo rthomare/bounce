@@ -3,8 +3,9 @@
 import UIKit
 
 protocol SongLinkRequest {
+    var songLink: URL { get }
     func onLoading(_ callback: @escaping (URL, any SongLinkRequest) -> Void) -> any SongLinkRequest
-    func onSuccess(_ callback: @escaping (SongModel, any SongLinkRequest) -> Void) -> any SongLinkRequest
+    func onSuccess(_ callback: @escaping (Song, any SongLinkRequest) -> Void) -> any SongLinkRequest
     func onFailure(_ callback: @escaping (Error, any SongLinkRequest) -> Void) -> any SongLinkRequest
     func resume()
     func cancel()
@@ -14,13 +15,13 @@ protocol SongLinkRequestFactory {
     static func build(songLink: URL) -> any SongLinkRequest
 }
 
-func loadSong(response: SongResponse, completion: @escaping (SongModel) -> Void) {
+func loadSong(response: SongResponse, completion: @escaping (Song) -> Void) {
     let entity = response.entitiesByUniqueId[response.entityUniqueId]
         let url = entity?.thumbnailUrl == nil ? nil : URL(string: entity!.thumbnailUrl)
         // Download the image
         URLSession.shared.dataTask(with: url!) { data, _, _ in
             let image = data != nil ? UIImage(data: data!) : nil
-            let song = SongModel(
+            let song = Song(
                 title: entity!.title,
                 artistName: entity!.artistName,
                 thumbnail: image,
@@ -42,16 +43,16 @@ struct MockSongLinkRequestFactory: SongLinkRequestFactory {
 
 class MockSongLinkRequest: SongLinkRequest {
     private var _loadingCallback: ((URL, SongLinkRequest) -> Void)?
-    private var _successCallback: ((SongModel, SongLinkRequest) -> Void)?
+    private var _successCallback: ((Song, SongLinkRequest) -> Void)?
     private var _failureCallback: ((Error, SongLinkRequest) -> Void)?
-    let _songLink: URL
+    let songLink: URL
     
     init(_ songLink: URL) {
-        _songLink = songLink
+        self.songLink = songLink
     }
     
     static func mockSong() throws -> SongResponse?  {
-        guard let url = Bundle.main.url(forResource: "sampleResponse", withExtension: "json") else {
+        guard let url = Bundle.main.url(forResource: "sampleResponse2", withExtension: "json") else {
             throw URLError(.badURL)
         }
         
@@ -68,12 +69,12 @@ class MockSongLinkRequest: SongLinkRequest {
     
     func resume() {
         // wait some time and then set the state to cached success
-        self._loadingCallback?(_songLink, self)
+        self._loadingCallback?(songLink, self)
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
             do {
                 let response = try MockSongLinkRequest.mockSong()!
-                loadSong(response: response) { songModel in
-                    self._successCallback?(songModel, self)
+                loadSong(response: response) { Song in
+                    self._successCallback?(Song, self)
                 }
             } catch {
                self._failureCallback?(error, self)
@@ -90,7 +91,7 @@ class MockSongLinkRequest: SongLinkRequest {
         return self
     }
     
-    func onSuccess(_ callback: @escaping (SongModel, SongLinkRequest) -> Void) -> any SongLinkRequest {
+    func onSuccess(_ callback: @escaping (Song, SongLinkRequest) -> Void) -> any SongLinkRequest {
         _successCallback = callback
         return self
     }
@@ -109,12 +110,12 @@ struct DefaultSongLinkRequestFactory: SongLinkRequestFactory {
 
 class DefaultSongLinkRequest: SongLinkRequest {
     private var _loadingCallback: ((URL, SongLinkRequest) -> Void)?
-    private var _successCallback: ((SongModel, SongLinkRequest) -> Void)?
+    private var _successCallback: ((Song, SongLinkRequest) -> Void)?
     private var _failureCallback: ((Error, SongLinkRequest) -> Void)?
     private var _task: URLSessionDataTask?
     private let _session: URLSession
     private let _cache: URLCache
-    private let _songLink: URL
+    internal let songLink: URL
     
     init(_ songLink: URL) {
         // Configure URLCache with disk persistence
@@ -126,11 +127,11 @@ class DefaultSongLinkRequest: SongLinkRequest {
         config.urlCache = _cache
         config.requestCachePolicy = .returnCacheDataElseLoad
         _session = URLSession(configuration: config)
-        _songLink = songLink
+        self.songLink = songLink
     }
     
     // Fetch JSON data using URLSessionDataTask
-    private func _fetchData(fetchURL: URL, maxCacheAge: TimeInterval = 3600, completion: @escaping (Result<SongModel, Error>) -> Void) -> URLSessionDataTask {
+    private func _fetchData(fetchURL: URL, maxCacheAge: TimeInterval = 3600, completion: @escaping (Result<Song, Error>) -> Void) -> URLSessionDataTask {
         let request = URLRequest(url: fetchURL)
         let cache = _cache
         
@@ -165,8 +166,8 @@ class DefaultSongLinkRequest: SongLinkRequest {
                 // Cache the response with a custom timestamp
                 let cachedResponse = CachedURLResponse(response: response, data: data, userInfo: ["bounce-cached-date": Date()], storagePolicy: .allowed)
                 cache.storeCachedResponse(cachedResponse, for: request)
-                loadSong(response: songResponse) { songModel in
-                    completion(.success(songModel))
+                loadSong(response: songResponse) { Song in
+                    completion(.success(Song))
                 }
             } catch {
                 completion(.failure(error))
@@ -177,8 +178,8 @@ class DefaultSongLinkRequest: SongLinkRequest {
     }
     
     func resume() {
-        _loadingCallback?(_songLink, self)
-        let encodedSongLink = _songLink.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        _loadingCallback?(songLink, self)
+        let encodedSongLink = songLink.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
         let url = URL(string: "https://api.song.link/v1-alpha.1/links?url=\(encodedSongLink)&userCountry=US&songIfSingle=true")
         let req = self
         DispatchQueue.global().async { [weak self] in
@@ -193,8 +194,8 @@ class DefaultSongLinkRequest: SongLinkRequest {
                 }
                 DispatchQueue.main.async { [weak self] in
                     switch result {
-                    case .success(let songModel):
-                        self?._successCallback?(songModel, req)
+                    case .success(let Song):
+                        self?._successCallback?(Song, req)
                     case .failure(let error):
                         self?._failureCallback?(error, req)
                     }
@@ -214,7 +215,7 @@ class DefaultSongLinkRequest: SongLinkRequest {
         return self
     }
     
-    func onSuccess(_ callback: @escaping (SongModel, SongLinkRequest) -> Void) -> any SongLinkRequest {
+    func onSuccess(_ callback: @escaping (Song, SongLinkRequest) -> Void) -> any SongLinkRequest {
         _successCallback = callback
         return self
     }

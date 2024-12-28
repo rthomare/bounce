@@ -3,27 +3,23 @@
 import SwiftUI
 
 struct CreateView: View {
-    private let songModelGenerated: ((SongModel) -> Void)?
-    @StateObject private var flowController: CreateFlowController
-    
-    init(requestBuilder: SongLinkRequestFactory.Type, onSongModelGenerated: ((SongModel) -> Void)? = nil) {
-        _flowController = StateObject(wrappedValue: CreateFlowController(requestBuilder))
-        songModelGenerated = onSongModelGenerated
-    }
+    @ObservedObject var flowController: CreateFlowController
+    var songGenerated: ((Song) -> Void)? = nil
     
     @ViewBuilder var content: some View {
-        switch _flowController.wrappedValue.state {
-            case .initial: InitialView()
-            case .loadingSong(link: let link, request: _):  LoadingSongView(link: link)
-        case .songLoaded(song: let song, request: _):  SongLoadedView(song: song ).onTapGesture {apGesture in
-            if let songModelGenerated {
-                songModelGenerated(song)
-                _flowController.wrappedValue.reset()
+        switch flowController.state {
+            case .initializing, .loadingSong:
+                    LoaderView(isLoading: true, speed: 1.5)
+        case .idle: InitialView(flowController: flowController)
+            case .songLoaded(song: let song, request: _):  SongLoadedView(song: song ).onTapGesture {_ in
+                if let songGenerated {
+                    songGenerated(song)
+                    flowController.reset()
+                }
             }
-        }
-        case .loadError(error: let error, request: _):  ErrorView(error: error).onTapGesture {apGesture in
-            _flowController.wrappedValue.reset()
-        }
+        case .loadError(error: let error, request: _):  ErrorView(flowController: flowController, error: error).onTapGesture {apGesture in
+                flowController.reset()
+            }
         }
     }
     
@@ -36,12 +32,18 @@ struct CreateView: View {
                 .font(.footnote)
                 .foregroundColor(Color.secondary)
                 .fontWeight(.light)
+                .padding(.bottom, 4)
+        }.onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                flowController.initialize()
+            }
         }
     }
 }
 
 #Preview {
+    let flowController = CreateFlowController(MockSongLinkRequestFactory.self)
     VStack(alignment: .center) {
-        CreateView(requestBuilder: MockSongLinkRequestFactory.self)
+        CreateView(flowController:flowController)
     }
 }

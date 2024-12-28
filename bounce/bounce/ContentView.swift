@@ -1,17 +1,19 @@
 //  Created by Rohan Thomare on 12/23/24.
 
 import SwiftUI
+import MediaPlayer
 
 struct ContentView: View {
-    @State var text = "Ready to copy"
+    let flowController = CreateFlowController(DefaultSongLinkRequestFactory.self)
 
     var body: some View {
         VStack(alignment: .center) {
-            CreateView(requestBuilder: DefaultSongLinkRequestFactory.self)
+            CreateView(flowController: flowController)
         }
     }
 }
 
 #Preview {
-    CreateView(requestBuilder: MockSongLinkRequestFactory.self)
+    let flowController = CreateFlowController(MockSongLinkRequestFactory.self)
+    CreateView(flowController: flowController)
 }

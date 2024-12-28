@@ -1,0 +1,206 @@
+{
+  "entityUniqueId": "SPOTIFY_ALBUM::3VQkNrG74QPY4rHBPoyZYZ",
+  "userCountry": "US",
+  "pageUrl": "https://album.link/s/3VQkNrG74QPY4rHBPoyZYZ",
+  "entitiesByUniqueId": {
+    "AMAZON_ALBUM::B0DR3DLGXL": {
+      "id": "B0DR3DLGXL",
+      "type": "album",
+      "title": "SOS Deluxe: LANA",
+      "artistName": "SZA",
+      "thumbnailUrl": "https://m.media-amazon.com/images/I/51yY7TQOKAL.jpg",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "amazon",
+      "platforms": [
+        "amazonMusic",
+        "amazonStore"
+      ]
+    },
+    "AUDOMACK_ALBUM::55807077": {
+      "id": "55807077",
+      "type": "album",
+      "title": "SOS Deluxe: LANA",
+      "artistName": "SZA",
+      "thumbnailUrl": "https://assets.audiomack.com/sza/7f59181079407a38df4816c8f844ca1c8aaea99bc9e7dc884386bf0baa61e44e.jpeg?width=500&height=500&max=true",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "audiomack",
+      "platforms": [
+        "audiomack"
+      ]
+    },
+    "ANGHAMI_ALBUM::1062251028": {
+      "id": "1062251028",
+      "type": "album",
+      "title": "SOS Deluxe: LANA",
+      "artistName": "SZA",
+      "thumbnailUrl": "https://artwork.anghcdn.co/cover/216834557/320",
+      "thumbnailWidth": 1024,
+      "thumbnailHeight": 1024,
+      "apiProvider": "anghami",
+      "platforms": [
+        "anghami"
+      ]
+    },
+    "BANDCAMP_ALBUM::3442871552": {
+      "id": "3442871552",
+      "type": "album",
+      "title": "SOS Deluxe: LANA",
+      "artistName": "SZA",
+      "thumbnailUrl": "https://f4.bcbits.com/img/a0592369685_5.jpg",
+      "thumbnailWidth": 700,
+      "thumbnailHeight": 700,
+      "apiProvider": "bandcamp",
+      "platforms": [
+        "bandcamp"
+      ]
+    },
+    "DEEZER_ALBUM::686640951": {
+      "id": "686640951",
+      "type": "album",
+      "title": "SOS Deluxe: LANA",
+      "artistName": "SZA",
+      "thumbnailUrl": "http://cdn-images.dzcdn.net/images/cover/992cc838b5f0cf0eebbd83011a979571/500x500-000000-80-0-0.jpg",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "deezer",
+      "platforms": [
+        "deezer"
+      ]
+    },
+    "ITUNES_ALBUM::1786643044": {
+      "id": "1786643044",
+      "type": "album",
+      "title": "SOS Deluxe: LANA",
+      "artistName": "SZA",
+      "thumbnailUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/97/bd/88/97bd8804-7d3e-e6c8-0532-ff22877b931c/196871766890.jpg/512x512bb.jpg",
+      "thumbnailWidth": 512,
+      "thumbnailHeight": 512,
+      "apiProvider": "itunes",
+      "platforms": [
+        "appleMusic",
+        "itunes"
+      ]
+    },
+    "PANDORA_ALBUM::AL:42533691": {
+      "id": "AL:42533691",
+      "type": "album",
+      "title": "SOS Deluxe: LANA",
+      "artistName": "SZA",
+      "thumbnailUrl": "https://content-images.p-cdn.com/images/c4/e6/95/c6/7cfc4f069cb7b1be7ff3f3e9/_500W_500H.jpg",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "pandora",
+      "platforms": [
+        "pandora"
+      ]
+    },
+    "SOUNDCLOUD_PLAYLIST::1928518223": {
+      "id": "1928518223",
+      "type": "album",
+      "title": "SOS Deluxe: LANA",
+      "artistName": "SZA",
+      "thumbnailUrl": "https://i1.sndcdn.com/artworks-ed1b9818-0814-4892-8efb-3194e47fdce6-0-t500x500.jpg",
+      "thumbnailWidth": 500,
+      "thumbnailHeight": 500,
+      "apiProvider": "soundcloud",
+      "platforms": [
+        "soundcloud"
+      ]
+    },
+    "SPOTIFY_ALBUM::3VQkNrG74QPY4rHBPoyZYZ": {
+      "id": "3VQkNrG74QPY4rHBPoyZYZ",
+      "type": "album",
+      "title": "SOS Deluxe: LANA",
+      "artistName": "SZA",
+      "thumbnailUrl": "https://i.scdn.co/image/ab67616d0000b2737f5a318e3ff35defa8d0e4af",
+      "thumbnailWidth": 640,
+      "thumbnailHeight": 640,
+      "apiProvider": "spotify",
+      "platforms": [
+        "spotify"
+      ]
+    },
+    "TIDAL_ALBUM::407108971": {
+      "id": "407108971",
+      "type": "album",
+      "title": "SOS Deluxe: LANA",
+      "artistName": "SZA",
+      "thumbnailUrl": "https://resources.tidal.com/images/d5fc3a52/3c80/4c67/b377/f69b022ab263/640x640.jpg",
+      "thumbnailWidth": 640,
+      "thumbnailHeight": 640,
+      "apiProvider": "tidal",
+      "platforms": [
+        "tidal"
+      ]
+    }
+  },
+  "linksByPlatform": {
+    "amazonMusic": {
+      "country": "US",
+      "url": "https://music.amazon.com/albums/B0DR3DLGXL",
+      "entityUniqueId": "AMAZON_ALBUM::B0DR3DLGXL"
+    },
+    "amazonStore": {
+      "country": "US",
+      "url": "https://amazon.com/dp/B0DR3DLGXL",
+      "entityUniqueId": "AMAZON_ALBUM::B0DR3DLGXL"
+    },
+    "audiomack": {
+      "country": "US",
+      "url": "https://audiomack.com/album/sza/sos-deluxe-lana-1722288",
+      "entityUniqueId": "AUDOMACK_ALBUM::55807077"
+    },
+    "anghami": {
+      "country": "US",
+      "url": "https://play.anghami.com/album/1062251028?refer=linktree",
+      "entityUniqueId": "ANGHAMI_ALBUM::1062251028"
+    },
+    "bandcamp": {
+      "country": "US",
+      "url": "https://szamusic.bandcamp.com/album/sos-deluxe-lana",
+      "entityUniqueId": "BANDCAMP_ALBUM::3442871552"
+    },
+    "deezer": {
+      "country": "US",
+      "url": "https://www.deezer.com/album/686640951",
+      "entityUniqueId": "DEEZER_ALBUM::686640951"
+    },
+    "appleMusic": {
+      "country": "US",
+      "url": "https://geo.music.apple.com/us/album/_/1786643044?mt=1&app=music&ls=1&at=1000lHKX&ct=api_http&itscg=30200&itsct=odsl_m",
+      "nativeAppUriMobile": "music://itunes.apple.com/us/album/_/1786643044?mt=1&app=music&ls=1&at=1000lHKX&ct=api_uri_m&itscg=30200&itsct=odsl_m",
+      "nativeAppUriDesktop": "itmss://itunes.apple.com/us/album/_/1786643044?mt=1&app=music&ls=1&at=1000lHKX&ct=api_uri_d&itscg=30200&itsct=odsl_m",
+      "entityUniqueId": "ITUNES_ALBUM::1786643044"
+    },
+    "itunes": {
+      "country": "US",
+      "url": "https://geo.music.apple.com/us/album/_/1786643044?mt=1&app=itunes&ls=1&at=1000lHKX&ct=api_http&itscg=30200&itsct=odsl_m",
+      "nativeAppUriMobile": "itmss://itunes.apple.com/us/album/_/1786643044?mt=1&app=itunes&ls=1&at=1000lHKX&ct=api_uri_m&itscg=30200&itsct=odsl_m",
+      "nativeAppUriDesktop": "itmss://itunes.apple.com/us/album/_/1786643044?mt=1&app=itunes&ls=1&at=1000lHKX&ct=api_uri_d&itscg=30200&itsct=odsl_m",
+      "entityUniqueId": "ITUNES_ALBUM::1786643044"
+    },
+    "pandora": {
+      "country": "US",
+      "url": "https://www.pandora.com/AL:42533691",
+      "entityUniqueId": "PANDORA_ALBUM::AL:42533691"
+    },
+    "soundcloud": {
+      "country": "US",
+      "url": "https://soundcloud.com/szababy2/sets/sos-deluxe-lana-1",
+      "entityUniqueId": "SOUNDCLOUD_PLAYLIST::1928518223"
+    },
+    "tidal": {
+      "country": "US",
+      "url": "https://listen.tidal.com/album/407108971",
+      "entityUniqueId": "TIDAL_ALBUM::407108971"
+    },
+    "spotify": {
+      "country": "US",
+      "url": "https://open.spotify.com/album/3VQkNrG74QPY4rHBPoyZYZ",
+      "nativeAppUriDesktop": "spotify:album:3VQkNrG74QPY4rHBPoyZYZ",
+      "entityUniqueId": "SPOTIFY_ALBUM::3VQkNrG74QPY4rHBPoyZYZ"
+    }
+  }
+}

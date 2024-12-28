@@ -5,9 +5,10 @@ import Messages
 import SwiftUI
 
 class MessagesViewController: MSMessagesAppViewController {
-    var hostingController: UIHostingController<CreateView>?
+    var _hostingController: UIHostingController<CreateView>?
+    var _flowController: CreateFlowController?
     
-    func sendSongMessage(_ song: SongModel) {
+    func sendSongMessage(_ song: Song) {
         let message = MessageFactory.buildSongMessage(song)!
         // Send the message
         activeConversation?.insert(message, completionHandler: { error in
@@ -21,14 +22,15 @@ class MessagesViewController: MSMessagesAppViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Create the SwiftUI view
         // Define the closure to handle song link creation
-        let onSongModelGenerated: (SongModel) -> Void = { [weak self] song in
+        let onSongModelGenerated: (Song) -> Void = { [weak self] song in
             self?.sendSongMessage(song)
         }
         
-        let swiftUIView = CreateView(requestBuilder: DefaultSongLinkRequestFactory.self, onSongModelGenerated: onSongModelGenerated)
+        let flowController = CreateFlowController(DefaultSongLinkRequestFactory.self)
+        let swiftUIView = CreateView(flowController: flowController, songGenerated: onSongModelGenerated)
 
         // Embed the SwiftUI view in a UIHostingController
         let hostingController = UIHostingController(rootView: swiftUIView)
@@ -49,7 +51,7 @@ class MessagesViewController: MSMessagesAppViewController {
         hostingController.didMove(toParent: self)
 
         // Store the hosting controller for later use
-        self.hostingController = hostingController
+        self._hostingController = hostingController
     }
 
     // MARK: - Conversation Handling

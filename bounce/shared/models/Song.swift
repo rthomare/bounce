@@ -3,21 +3,8 @@
 import UIKit
 
 enum PlatformIdentifier: String, Codable {
-    case amazonMusic = "amazonMusic"
-    case amazonStore = "amazonStore"
-    case audiomack = "audiomack"
-    case anghami = "anghami"
-    case boomplay = "boomplay"
-    case deezer = "deezer"
     case appleMusic = "appleMusic"
-    case itunes = "itunes"
-    case napster = "napster"
-    case pandora = "pandora"
-    case soundcloud = "soundcloud"
-    case tidal = "tidal"
-    case yandex = "yandex"
     case youtube = "youtube"
-    case youtubeMusic = "youtubeMusic"
     case spotify = "spotify"
 }
 
@@ -30,7 +17,7 @@ struct SongEntity: Codable {
     let thumbnailWidth: Int
     let thumbnailHeight: Int
     let apiProvider: String
-    let platforms: [PlatformIdentifier] // Updated to use PlatformIdentifier
+    let platforms: [String] // Updated to use PlatformIdentifier
 }
 
 struct PlatformLink: Codable {
@@ -65,14 +52,21 @@ struct SongResponse: Codable {
     }
 }
 
-struct SongModel {
+struct Song {
     let title: String
     let artistName: String
     let thumbnail: UIImage?
     let thumbnailUrl: String
     let thumbnailWidth: Int
     let thumbnailHeight: Int
-    let platform: PlatformIdentifier
+    let platform: String
     let rawData: SongResponse
+}
+
+struct SongAbridged {
+    let title: String
+    let artistName: String
+    let thumbnailUrl: String
+    let linksByPlatform: [String: PlatformLink]
 }
 

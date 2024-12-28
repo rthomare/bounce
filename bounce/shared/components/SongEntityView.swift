@@ -20,7 +20,7 @@ struct BlurView: UIViewRepresentable {
 }
 
 struct SongEntityView: View {
-    let song: SongModel
+    let song: Song
     
     var body: some View {
         GeometryReader { geometry in
@@ -33,7 +33,7 @@ struct SongEntityView: View {
                         .clipped()
                 HStack {
                     // Blur and Text Overlay
-                    VStack(spacing: 4) {
+                    VStack(alignment:.leading, spacing: 4) {
                         Text(song.title)
                             .font(.headline)
                             .foregroundColor(.white)
@@ -60,14 +60,14 @@ struct SongEntityView: View {
 }
 
 struct PreviewSongEntity: View {
-    @State var song: SongModel? = nil
+    @State var song: Song? = nil
     @State var isLoading = true
     @State var speed = 1.5
     @State var request = MockSongLinkRequestFactory.build(songLink: URL(filePath: "spotify:track:0Jcij1eWd5bDMU5iPbxe2i")!)
     
     var body: some View {
         if (song == nil) {
-            LoaderView(isLoading: $isLoading, speed: $speed).onAppear {
+            LoaderView(isLoading: isLoading, speed: speed).onAppear {
                 request = request.onSuccess { mockedSong, _ in
                     isLoading = false
                     song = mockedSong
