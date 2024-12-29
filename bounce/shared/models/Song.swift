@@ -2,7 +2,7 @@
 
 import UIKit
 
-enum PlatformIdentifier: String, Codable {
+enum PlatformIdentifier: String, Codable, CaseIterable {
     case appleMusic = "appleMusic"
     case youtube = "youtube"
     case spotify = "spotify"
@@ -13,7 +13,7 @@ struct SongEntity: Codable {
     let type: String
     let title: String
     let artistName: String
-    let thumbnailUrl: String
+    let thumbnailUrl: URL
     let thumbnailWidth: Int
     let thumbnailHeight: Int
     let apiProvider: String
@@ -52,20 +52,26 @@ struct SongResponse: Codable {
     }
 }
 
+struct SongAbridged: Codable {
+    let title: String
+    let artistName: String
+    let thumbnailUrl: URL
+    let requestPlatform: PlatformIdentifier
+    let requestSongUrl: URL
+}
+
 struct Song {
     let title: String
     let artistName: String
     let thumbnail: UIImage?
-    let thumbnailUrl: String
+    let thumbnailUrl: URL
     let thumbnailWidth: Int
     let thumbnailHeight: Int
     let platform: String
+    let platformEntityUrl: URL
     let rawData: SongResponse
-}
-
-struct SongAbridged {
-    let title: String
-    let artistName: String
-    let thumbnailUrl: String
-    let linkByPlatform: [PlatformIdentifier: String]
+    
+    func abridged() -> SongAbridged {
+        return SongAbridged(title: title, artistName: artistName, thumbnailUrl: thumbnailUrl, requestPlatform: .appleMusic, requestSongUrl: platformEntityUrl)
+    }
 }

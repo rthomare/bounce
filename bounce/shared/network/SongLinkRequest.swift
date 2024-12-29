@@ -15,23 +15,26 @@ protocol SongLinkRequestFactory {
     static func build(songLink: URL) -> any SongLinkRequest
 }
 
-func loadSong(response: SongResponse, completion: @escaping (Song) -> Void) {
-    let entity = response.entitiesByUniqueId[response.entityUniqueId]
-        let url = entity?.thumbnailUrl == nil ? nil : URL(string: entity!.thumbnailUrl)
+func loadSong(request: SongLinkRequest, response: SongResponse, completion: @escaping (Song?, Error?) -> Void) {
+        guard let entity = response.entitiesByUniqueId[response.entityUniqueId] else {
+            completion(nil, nil)
+            return
+        }
         // Download the image
-        URLSession.shared.dataTask(with: url!) { data, _, _ in
+        URLSession.shared.dataTask(with: entity.thumbnailUrl) { data, _, _ in
             let image = data != nil ? UIImage(data: data!) : nil
             let song = Song(
-                title: entity!.title,
-                artistName: entity!.artistName,
+                title: entity.title,
+                artistName: entity.artistName,
                 thumbnail: image,
-                thumbnailUrl: entity!.thumbnailUrl,
-                thumbnailWidth: entity!.thumbnailWidth,
-                thumbnailHeight: entity!.thumbnailHeight,
-                platform: entity!.platforms[0],
+                thumbnailUrl: entity.thumbnailUrl,
+                thumbnailWidth: entity.thumbnailWidth,
+                thumbnailHeight: entity.thumbnailHeight,
+                platform: entity.platforms[0],
+                platformEntityUrl: request.songLink,
                 rawData: response
             )
-            completion(song)
+            completion(song, nil)
         }.resume()
 }
 
@@ -73,8 +76,12 @@ class MockSongLinkRequest: SongLinkRequest {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
             do {
                 let response = try MockSongLinkRequest.mockSong()!
-                loadSong(response: response) { Song in
-                    self._successCallback?(Song, self)
+                loadSong(request: self, response: response) { song, error in
+                    guard let song else {
+                        self._failureCallback?(error ?? URLError(.badServerResponse), self)
+                        return
+                    }
+                    self._successCallback?(song, self)
                 }
             } catch {
                self._failureCallback?(error, self)
@@ -166,8 +173,12 @@ class DefaultSongLinkRequest: SongLinkRequest {
                 // Cache the response with a custom timestamp
                 let cachedResponse = CachedURLResponse(response: response, data: data, userInfo: ["bounce-cached-date": Date()], storagePolicy: .allowed)
                 cache.storeCachedResponse(cachedResponse, for: request)
-                loadSong(response: songResponse) { Song in
-                    completion(.success(Song))
+                loadSong(request: self, response: songResponse) { song, error in
+                    guard let song else {
+                        completion(.failure(error ?? URLError(.badServerResponse)))
+                        return
+                    }
+                    completion(.success(song))
                 }
             } catch {
                 completion(.failure(error))

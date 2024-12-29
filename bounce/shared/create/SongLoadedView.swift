@@ -79,6 +79,9 @@ struct SongLoadedView: View {
                 }
             }.scaleEffect(isPressed ? 0.95 : 1.0)
                 .animation(.spring(response: 0.2, dampingFraction: 0.25), value: isPressed)
+            .background(ShakeDetector {
+                flowController.selectSong(song, selectionType: .shake)
+            })
         }
     }
 }

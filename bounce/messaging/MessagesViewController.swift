@@ -3,22 +3,26 @@
 import UIKit
 import Messages
 import SwiftUI
-import AVFoundation
 
 class MessagesViewController: MSMessagesAppViewController {
     var _hostingController: UIHostingController<CreateView>?
     var _flowController: CreateFlowController?
-    
-    func sendSongMessage(_ song: Song) {
+
+    func sendSongMessage(_ song: Song, _ selectionType: SongSelectionType) {
         let message = MessageFactory.buildSongMessage(song)!
+        
         // Send the message
-        activeConversation?.insert(message, completionHandler: { error in
-            if let error = error {
-                print("Failed to send message: \(error.localizedDescription)")
-            } else {
-                print("Message sent successfully!")
-            }
-        })
+        if (selectionType == .shake) {
+            _handleMessage(message)
+        } else {
+            activeConversation?.send(message, completionHandler: { error in
+                if let error = error {
+                    print("Failed to send message: \(error.localizedDescription)")
+                } else {
+                    print("Message sent successfully!")
+                }
+            })
+        }
     }
 
     override func viewDidLoad() {
@@ -26,9 +30,10 @@ class MessagesViewController: MSMessagesAppViewController {
         
         // Create the SwiftUI view
         // Define the closure to handle song link creation
-        let flowController = CreateFlowController(DefaultSongLinkRequestFactory.self) { [weak self] song in
+        let flowController = CreateFlowController(DefaultSongLinkRequestFactory.self) { [weak self] song, selectionType in
             guard let self else { return }
-            self.sendSongMessage(song)
+            self.sendSongMessage(song, selectionType)
+            requestPresentationStyle(.compact)
         }
         let swiftUIView = CreateView(flowController: flowController)
 
@@ -52,7 +57,6 @@ class MessagesViewController: MSMessagesAppViewController {
 
         // Store the hosting controller for later use
         self._hostingController = hostingController
-        
     }
 
     // MARK: - Conversation Handling
@@ -64,6 +68,34 @@ class MessagesViewController: MSMessagesAppViewController {
         // Use this method to configure the extension and restore previously stored state.
     }
     
+    private func _handleMessage(_ message: MSMessage) {
+        if let url = message.url {
+            // Parse the URL to extract parameters
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            if let queryItems = components?.queryItems {
+                for queryItem in queryItems {
+                    print("Received key: \(queryItem.name), value: \(queryItem.value ?? "nil")")
+                    // Process the query item based on your app's logic
+                }
+            }
+        }
+
+        if let layout = message.layout as? MSMessageTemplateLayout {
+            print("Received message with caption: \(layout.caption ?? "No caption")")
+            // Handle any layout-specific data
+        }
+    }
+    
+    override func didBecomeActive(with conversation: MSConversation) {
+        guard let selectedMessage = conversation.selectedMessage else {
+            print("No message selected")
+            return
+        }
+
+        // Handle the incoming message
+        _handleMessage(selectedMessage)
+    }
+    
     override func didResignActive(with conversation: MSConversation) {
         // Called when the extension is about to move from the active to inactive state.
         // This will happen when the user dismisses the extension, changes to a different
@@ -72,6 +104,8 @@ class MessagesViewController: MSMessagesAppViewController {
         // Use this method to release shared resources, save user data, invalidate timers,
         // and store enough state information to restore your extension to its current state
         // in case it is terminated later.
+        
+        // no-op
     }
    
     override func didReceive(_ message: MSMessage, conversation: MSConversation) {
@@ -79,6 +113,8 @@ class MessagesViewController: MSMessagesAppViewController {
         // extension on a remote device.
         
         // Use this method to trigger UI updates in response to the message.
+        
+        // TODO: prefetch the data for the songlink to simplify transitions
     }
     
     override func didStartSending(_ message: MSMessage, conversation: MSConversation) {
