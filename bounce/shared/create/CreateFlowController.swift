@@ -18,25 +18,30 @@ enum CreateFlowState {
     case loadError(error: Error, request: any SongLinkRequest)
 }
 
+enum SongSelectionType {
+    case tapped
+    case shake
+}
+
 enum CreateFlowActions {
     case startDetection
     case emptyDetection
     case dectectedSongUrl(songUrl: URL)
     case didLoadSong(song: Song, request: any SongLinkRequest)
     case failedToLoadSong(error: Error, request: any SongLinkRequest)
-    case selectSong(song: Song)
+    case selectSong(song: Song, selectionType: SongSelectionType)
     case reset
 }
 
 class CreateFlowController: ObservableObject {
     @Published var state: CreateFlowState = .initializing
-    private let _onSongSelected: ((Song) -> Void)?
+    private let _onSongSelected: ((Song, SongSelectionType) -> Void)?
     private var _songLinkRequestFactory: SongLinkRequestFactory.Type
     private let _notificationCenter: NotificationCenter = .default
     private let _musicPlayer = MPMusicPlayerController.systemMusicPlayer
     private let _hasMusicPermission: Bool = false
     
-    init(_ factory: SongLinkRequestFactory.Type, onSongSelected: ((Song) -> Void)? = nil) {
+    init(_ factory: SongLinkRequestFactory.Type, onSongSelected: ((Song, SongSelectionType) -> Void)? = nil) {
         _songLinkRequestFactory = factory
         _onSongSelected = onSongSelected
     }
@@ -80,8 +85,8 @@ class CreateFlowController: ObservableObject {
                 _setState(.songLoaded(song: song, request: request))
             case .failedToLoadSong(error: let error, request: let request):
                 _setState(.loadError(error: error, request: request))
-            case .selectSong(song: let song):
-                self._onSongSelected?(song)
+            case .selectSong(song: let song, selectionType: let selectionType):
+                self._onSongSelected?(song, selectionType)
             case .reset:
                 _setState(.idle)
         }
@@ -202,8 +207,8 @@ class CreateFlowController: ObservableObject {
         }
     }
     
-    func selectSong(_ song: Song) {
-        self._handleAction(.selectSong(song: song))
+    func selectSong(_ song: Song, selectionType: SongSelectionType = SongSelectionType.tapped) {
+        self._handleAction(.selectSong(song: song, selectionType: selectionType))
     }
     
     func reset () {

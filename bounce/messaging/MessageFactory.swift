@@ -5,17 +5,8 @@ import Messages
 
 class MessageFactory {
     static func buildSongMessage(_ song: Song) -> MSMessage? {
-        // Create a message URL with the song link data
-        let queryItems = [
-            URLQueryItem(name: "title", value: song.title),
-            URLQueryItem(name: "artist", value: song.artistName),
-            URLQueryItem(name: "url", value: "https://espn.com")
-        ]
-        
-        var components = URLComponents()
-        components.queryItems = queryItems
-
-        guard let messageURL = components.url else {
+        // Make an abridged version of the song
+        guard let messageURL = URL.from(baseURL: "https://songs.rohanthomare.com", parameters: song.abridged()) else {
             print("Failed to create message URL")
             return nil
         }
