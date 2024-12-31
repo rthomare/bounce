@@ -1,6 +1,7 @@
 //  Created by Rohan Thomare on 12/23/24.
 
 import Foundation
+import SwiftUICore
 
 enum RecieveState {
     case idle
@@ -17,7 +18,9 @@ enum RecieveActions {
 
 class ReceiveController: ObservableObject, RequestController {
     @Published var state: RecieveState = .idle
+    
     private var _songLinkRequestFactory: SongLinkRequestFactory.Type
+    var openURL: OpenURLAction?
     
     init(_ factory: SongLinkRequestFactory.Type) {
         _songLinkRequestFactory = factory
@@ -39,7 +42,11 @@ class ReceiveController: ObservableObject, RequestController {
                 }
                 request.resume()
             case .selectSong(song: let song, platform: let platform):
-                // TODO route to link
+                if let item = song.rawData.linksByPlatform.first(where: {
+                    $0.key == platform.rawValue
+                }), let url = URL(string: item.value.nativeAppUriMobile ?? item.value.url) {
+                    openURL?(url)
+                }
                 print ("selected song \(song), platform \(platform)")
             case .reset:
                 self.state = .idle
