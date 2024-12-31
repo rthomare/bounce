@@ -2,57 +2,58 @@
 
 import SwiftUI
 
-struct CreateView: View {
-    @ObservedObject var controller: CreateController
+struct ReceiveView: View {
+    @ObservedObject var controller: ReceiveController
     
     var animationValue: Int {
         switch controller.state {
-        case .initializing, .loadingSong, .detecting:
-            return 1
         case .idle:
+            return 1
+        case .loadingSong:
+            return 1
+        case .songLoaded:
             return 2
-        case .songLoaded(song: _, request: _):
+        case .loadError:
             return 3
-        case .loadError(error: _, request: _):
-            return 4
         }
     }
     
     @ViewBuilder var content: some View {
         switch controller.state {
-            case .initializing, .loadingSong, .detecting:
+            case .idle, .loadingSong:
+                // TODO: Loader view for state to show abridged song
                 LoaderView(isLoading: true, speed: 1.5)
-            case .idle: InitialView(controller: controller)
             case .songLoaded(song: let song, request: _):
-                CreateSongLoadedView(song: song, controller: controller)
+                ReceieveLoadedView(controller: controller, song: song)
             case .loadError(error: let error, request: _):
                 ErrorView(requestController: controller, error: error)
         }
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .center) {
             Spacer()
-            ZStack {
-                content.transition(.blurReplace)
-                        .animation(.easeInOut(duration: 0.25), value: animationValue)
-            }
-            .padding(.horizontal)
+            content
+                .transition(.blurReplace)
+                .animation(.easeInOut(duration: 0.25), value: animationValue)
+                .padding(.horizontal)
             Spacer()
             Text("bounce © 2024 powered by songlink")
                 .font(.footnote)
                 .foregroundColor(Color.secondary)
                 .fontWeight(.light)
                 .padding(.bottom, 4)
+        }.onAppear {
+            print(controller.state)
         }
     }
 }
 
 #Preview {
-    let controller = CreateController(MockSongLinkRequestFactory.self)
+    let controller = ReceiveController(MockSongLinkRequestFactory.self)
     VStack(alignment: .center) {
-        CreateView(controller:controller)
+        ReceiveView(controller: controller)
     }.onAppear {
-        controller.initialize()
+        controller.loadSong(with: URL(string:"https://songlink.io/song/123456789")!)
     }
 }

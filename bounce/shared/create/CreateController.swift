@@ -5,10 +5,6 @@ import MediaPlayer
 import MusicKit
 import UIKit
 
-protocol CreateFlowListener: AnyObject {
-    func didUpdateState(state: CreateFlowState) -> Void
-}
-
 enum CreateFlowState {
     case initializing
     case idle
@@ -33,7 +29,7 @@ enum CreateFlowActions {
     case reset
 }
 
-class CreateFlowController: ObservableObject {
+class CreateController: ObservableObject, RequestController {
     @Published var state: CreateFlowState = .initializing
     private let _onSongSelected: ((Song, SongSelectionType) -> Void)?
     private var _songLinkRequestFactory: SongLinkRequestFactory.Type

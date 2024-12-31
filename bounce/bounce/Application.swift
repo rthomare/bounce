@@ -4,7 +4,7 @@ import SwiftUI
 import UIKit
 
 @main
-struct bounceApp: App {
+struct Application: App {
     var body: some Scene {
         WindowGroup {
             ContentView().onAppear {

@@ -3,7 +3,7 @@
 import SwiftUI
 
 struct ErrorView: View {
-    var flowController: CreateFlowController
+    var requestController: RequestController
     var error: Error
     
     var body: some View {
@@ -12,7 +12,7 @@ struct ErrorView: View {
             .foregroundColor(Color.primary)
             .fontWeight(.thin)
         Button(action: {
-            flowController.retry()
+            requestController.retry()
         }, label: {
             Text("try again?")
         })
@@ -21,7 +21,6 @@ struct ErrorView: View {
     }
 }
 #Preview {
-    let flowController = CreateFlowController(MockSongLinkRequestFactory.self)
-
-    ErrorView(flowController: flowController, error: URLError(.badURL))
+    let controller = CreateController(MockSongLinkRequestFactory.self)
+    ErrorView(requestController: controller, error: URLError(.badURL))
 }
