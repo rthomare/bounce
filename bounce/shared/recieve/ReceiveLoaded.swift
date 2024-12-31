@@ -17,7 +17,7 @@ struct ReceieveLoadedView: View {
                     .foregroundColor(.secondary)
                     .font(expanded ? .title3 : .callout)
                     .padding(2)
-                PlatformTray(song: song, expanded: expanded)
+                PlatformTray(receiveController: controller, song: song, expanded: expanded)
                 if (expanded) { Spacer () }
             }.frame(maxWidth: .infinity)
         }

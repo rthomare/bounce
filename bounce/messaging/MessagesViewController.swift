@@ -4,12 +4,6 @@ import UIKit
 import Messages
 import SwiftUI
 
-func CreateAppController(onSongSelected: @escaping ((Song, SongSelectionType) -> Void)) -> AppController {
-    return AppController(
-        createController: CreateController(DefaultSongLinkRequestFactory.self, onSongSelected: onSongSelected),
-        receiveController: ReceiveController(DefaultSongLinkRequestFactory.self))
-}
-
 class MessagesViewController: MSMessagesAppViewController {
     var _hostingController: UIHostingController<BounceApp>?
     var _appController: AppController?
@@ -17,12 +11,12 @@ class MessagesViewController: MSMessagesAppViewController {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        _appController = CreateAppController(onSongSelected: self._handleSongGeneration)
+        _appController = AppController.defaultFactory(onSongSelected: self._handleSongGeneration, openURL: self._openURL)
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        _appController = CreateAppController(onSongSelected: self._handleSongGeneration)
+        _appController = AppController.defaultFactory(onSongSelected: self._handleSongGeneration, openURL: self._openURL)
     }
     
     override func loadView() {
@@ -51,10 +45,6 @@ class MessagesViewController: MSMessagesAppViewController {
     
     // MARK: Private Functions
     
-    private func _init() {
-        _appController = CreateAppController(onSongSelected: self._handleSongGeneration)
-    }
-    
     private func _handleSongGeneration(_ song: Song, _ selectionType: SongSelectionType) {
         let message = MessageFactory.buildSongMessage(song)!
         
@@ -74,6 +64,10 @@ class MessagesViewController: MSMessagesAppViewController {
             })
             
         }
+    }
+    
+    private func _openURL(_ url: URL) {
+        self.extensionContext?.open(url)
     }
 
     // MARK: - Conversation Handling

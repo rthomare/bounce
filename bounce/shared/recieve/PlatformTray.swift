@@ -3,8 +3,9 @@
 import SwiftUI
 
 struct PlatformButton: View {
+    let receiveController: ReceiveController
     let platform: PlatformIdentifier
-    let url: URL
+    let song: Song
     let expanded: Bool
     
     @Environment(\.openURL) private var openURL
@@ -45,7 +46,7 @@ struct PlatformButton: View {
     
     var body: some View {
         Button(action: {
-            openURL(url)
+            receiveController.selectPlatform(song: song, platform: platform)
         }) {
             Image(expanded ? imageExpanded : imageCompact)
                 .resizable()
@@ -70,17 +71,19 @@ struct PlatformButton: View {
 }
 
 struct RoutedPlatformButton: View {
+    let receiveController: ReceiveController
+    let platform: PlatformIdentifier
     let song: Song
     let expanded: Bool
-    let platform: PlatformIdentifier
     
     var body: some View {
         if let item = song.rawData.linksByPlatform.first(where: {
             $0.key == platform.rawValue
-        }), let url = URL(string: item.value.nativeAppUriMobile ?? item.value.url) {
+        }) {
             PlatformButton(
+                receiveController: receiveController,
                 platform: platform,
-                url: url,
+                song: song,
                 expanded: expanded
             )
         }
@@ -88,14 +91,27 @@ struct RoutedPlatformButton: View {
 }
 
 struct PlatformTray: View {
+    let receiveController: ReceiveController
     let song: Song
     let expanded: Bool
     
     var content: some View {
         Group {
-            RoutedPlatformButton(song: song, expanded: expanded, platform: .appleMusic)
-            RoutedPlatformButton(song: song, expanded: expanded, platform: .spotify)
-            RoutedPlatformButton(song: song, expanded: expanded, platform: .youtube)
+            RoutedPlatformButton(
+                receiveController: receiveController,
+                platform: .appleMusic,
+                song: song,
+                expanded: expanded)
+            RoutedPlatformButton(
+                receiveController: receiveController,
+                platform: .spotify,
+                song: song,
+                expanded: expanded)
+            RoutedPlatformButton(
+                receiveController: receiveController,
+                platform: .youtube,
+                song: song,
+                expanded: expanded)
         }
     }
     
@@ -123,12 +139,13 @@ struct PreviewPlatformTray: View {
     @State var isLoading = true
     @State var speed = 1.5
     var request = MockSongLinkRequestFactory.build(songLink: URL(filePath: "spotify:track:0Jcij1eWd5bDMU5iPbxe2i")!)
+    let controller = ReceiveController(MockSongLinkRequestFactory.self)
     
     var body: some View {
         if let song {
             Button("switch style to \(expanded ? "compact" : "expanded")") { expanded.toggle()
             }
-            PlatformTray(song: song, expanded: expanded).frame(maxHeight: expanded ? .infinity : 100)
+            PlatformTray(receiveController: controller, song: song, expanded: expanded).frame(maxHeight: expanded ? .infinity : 100)
         } else {
             LoaderView(isLoading: true, speed: 1.5).onAppear {
                 request.onSuccess { _song, _ in

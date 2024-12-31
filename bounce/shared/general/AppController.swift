@@ -21,6 +21,12 @@ class AppController : ObservableObject {
     @ObservedObject var receiveController: ReceiveController
     @Published var surface: AppSurface = .loading
     
+    static func defaultFactory(onSongSelected: @escaping ((Song, SongSelectionType) -> Void), openURL: @escaping ((URL) -> Void)) -> AppController {
+        return AppController(
+            createController: CreateController(DefaultSongLinkRequestFactory.self, onSongSelected: onSongSelected),
+            receiveController: ReceiveController(DefaultSongLinkRequestFactory.self))
+    }
+    
     init(createController: CreateController, receiveController: ReceiveController) {
         self.createController = createController
         self.receiveController = receiveController
