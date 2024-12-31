@@ -4,16 +4,16 @@ import SwiftUI
 import MediaPlayer
 
 struct ContentView: View {
-    let flowController = CreateFlowController(DefaultSongLinkRequestFactory.self)
+    let controller = CreateController(DefaultSongLinkRequestFactory.self)
 
     var body: some View {
         VStack(alignment: .center) {
-            CreateView(flowController: flowController)
+            CreateView(controller: controller)
         }
     }
 }
 
 #Preview {
-    let flowController = CreateFlowController(MockSongLinkRequestFactory.self)
-    CreateView(flowController: flowController)
+    let controller = CreateController(MockSongLinkRequestFactory.self)
+    CreateView(controller: controller)
 }

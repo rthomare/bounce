@@ -51,9 +51,9 @@ struct CloseButton: View {
     }
 }
 
-struct SongLoadedView: View {
+struct CreateSongLoadedView: View {
     var song: Song
-    let flowController: CreateFlowController
+    let controller: CreateController
     @State private var isPressed: Bool = false
     
     var body: some View {
@@ -69,29 +69,29 @@ struct SongLoadedView: View {
             Text("tap to share, or copy another song").foregroundColor(.secondary)
             ZStack(alignment: .topTrailing) {
                     SongEntityView(song: song).padding(4).onTapGesture {
-                        flowController.selectSong(song)
+                        controller.selectSong(song)
                     }
                     .onLongPressGesture(minimumDuration: 0.1, pressing: { isPressing in
                         isPressed = isPressing
                     }, perform: {})
                 CloseButton {
-                    flowController.reset()
+                    controller.reset()
                 }
             }.scaleEffect(isPressed ? 0.95 : 1.0)
                 .animation(.spring(response: 0.2, dampingFraction: 0.25), value: isPressed)
             .background(ShakeDetector {
-                flowController.selectSong(song, selectionType: .shake)
+                controller.selectSong(song, selectionType: .shake)
             })
         }
     }
 }
 
-struct PreviewSongLoaded: View {
+struct PreviewCreateSongLoaded: View {
     @State var song: Song? = nil
     @State var isLoading = true
     @State var speed = 1.5
     @State var request = MockSongLinkRequestFactory.build(songLink: URL(filePath: "spotify:track:0Jcij1eWd5bDMU5iPbxe2i")!)
-    let flowController = CreateFlowController(MockSongLinkRequestFactory.self)
+    let controller = CreateController(MockSongLinkRequestFactory.self)
     
     var body: some View {
         if (song == nil) {
@@ -103,11 +103,11 @@ struct PreviewSongLoaded: View {
                 request.resume()
             }
         } else {
-            SongLoadedView(song: song!, flowController: flowController).frame(width: 300, height: 300)
+            CreateSongLoadedView(song: song!, controller: controller).frame(width: 300, height: 300)
         }
     }
 }
 
 #Preview {
-    PreviewSongLoaded()
+    PreviewCreateSongLoaded()
 }

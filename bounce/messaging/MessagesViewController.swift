@@ -4,59 +4,76 @@ import UIKit
 import Messages
 import SwiftUI
 
-class MessagesViewController: MSMessagesAppViewController {
-    var _hostingController: UIHostingController<CreateView>?
-    var _flowController: CreateFlowController?
+func CreateAppController(onSongSelected: @escaping ((Song, SongSelectionType) -> Void)) -> AppController {
+    return AppController(
+        createController: CreateController(DefaultSongLinkRequestFactory.self, onSongSelected: onSongSelected),
+        receiveController: ReceiveController(DefaultSongLinkRequestFactory.self))
+}
 
-    func sendSongMessage(_ song: Song, _ selectionType: SongSelectionType) {
+class MessagesViewController: MSMessagesAppViewController {
+    var _hostingController: UIHostingController<BounceApp>?
+    var _appController: AppController?
+    var _appView: BounceApp?
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        _appController = CreateAppController(onSongSelected: self._handleSongGeneration)
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        _appController = CreateAppController(onSongSelected: self._handleSongGeneration)
+    }
+    
+    override func loadView() {
+        super.loadView()
+        _appView = BounceApp(_appController!)
+        _hostingController = UIHostingController(rootView: _appView!)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Add the hosting controller as a child
+        addChild(_hostingController!)
+        _hostingController!.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(_hostingController!.view)
+
+        // Set up constraints for the hosting controller's view
+        NSLayoutConstraint.activate([
+            _hostingController!.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            _hostingController!.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            _hostingController!.view.topAnchor.constraint(equalTo: view.topAnchor),
+            _hostingController!.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+
+        _hostingController!.didMove(toParent: self)
+    }
+    
+    // MARK: Private Functions
+    
+    private func _init() {
+        _appController = CreateAppController(onSongSelected: self._handleSongGeneration)
+    }
+    
+    private func _handleSongGeneration(_ song: Song, _ selectionType: SongSelectionType) {
         let message = MessageFactory.buildSongMessage(song)!
         
         // Send the message
         if (selectionType == .shake) {
-            _handleMessage(message)
+            _appController?.handle(action: .recievingSong(song: song.abridged()))
+            requestPresentationStyle(.expanded)
         } else {
-            activeConversation?.send(message, completionHandler: { error in
+            activeConversation?.send(message, completionHandler: { [weak self] error in
+                guard let self else { return }
+                self.requestPresentationStyle(.compact)
                 if let error = error {
                     print("Failed to send message: \(error.localizedDescription)")
                 } else {
                     print("Message sent successfully!")
                 }
             })
+            
         }
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Create the SwiftUI view
-        // Define the closure to handle song link creation
-        let flowController = CreateFlowController(DefaultSongLinkRequestFactory.self) { [weak self] song, selectionType in
-            guard let self else { return }
-            self.sendSongMessage(song, selectionType)
-            requestPresentationStyle(.compact)
-        }
-        let swiftUIView = CreateView(flowController: flowController)
-
-        // Embed the SwiftUI view in a UIHostingController
-        let hostingController = UIHostingController(rootView: swiftUIView)
-
-        // Add the hosting controller as a child
-        addChild(hostingController)
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(hostingController.view)
-
-        // Set up constraints for the hosting controller's view
-        NSLayoutConstraint.activate([
-            hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-
-        hostingController.didMove(toParent: self)
-
-        // Store the hosting controller for later use
-        self._hostingController = hostingController
     }
 
     // MARK: - Conversation Handling
@@ -68,32 +85,14 @@ class MessagesViewController: MSMessagesAppViewController {
         // Use this method to configure the extension and restore previously stored state.
     }
     
-    private func _handleMessage(_ message: MSMessage) {
-        if let url = message.url {
-            // Parse the URL to extract parameters
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-            if let queryItems = components?.queryItems {
-                for queryItem in queryItems {
-                    print("Received key: \(queryItem.name), value: \(queryItem.value ?? "nil")")
-                    // Process the query item based on your app's logic
-                }
-            }
-        }
-
-        if let layout = message.layout as? MSMessageTemplateLayout {
-            print("Received message with caption: \(layout.caption ?? "No caption")")
-            // Handle any layout-specific data
-        }
-    }
-    
     override func didBecomeActive(with conversation: MSConversation) {
-        guard let selectedMessage = conversation.selectedMessage else {
-            print("No message selected")
-            return
+        if let selectedMessage = conversation.selectedMessage, let song = MessageFactory.getSongFromMessage(selectedMessage) {
+            _appController?.handle(action: .recievingSong(song: song))
+            requestPresentationStyle(.expanded)
+        } else {
+            _appController?.handle(action: .startCreation)
+            requestPresentationStyle(.compact)
         }
-
-        // Handle the incoming message
-        _handleMessage(selectedMessage)
     }
     
     override func didResignActive(with conversation: MSConversation) {

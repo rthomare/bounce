@@ -3,7 +3,7 @@
 import SwiftUI
 
 struct InitialView: View {
-    let flowController: CreateFlowController
+    let controller: CreateController
     
     var body: some View {
         VStack {
@@ -13,7 +13,7 @@ struct InitialView: View {
                 .fontWeight(.thin)
             HStack(spacing:4) {
                 Button("tap here to check", action: {
-                    flowController.detectSong()
+                    controller.detectSong()
                 })
                     .font(.footnote)
                     .fontWeight(.medium)
@@ -24,13 +24,13 @@ struct InitialView: View {
             }
         }.background(
             ShakeDetector {
-                flowController.rotateRandomSong()
+                controller.rotateRandomSong()
             }
         )
     }
 }
 
 #Preview {
-    let flowController = CreateFlowController(MockSongLinkRequestFactory.self)
-    InitialView(flowController: flowController)
+    let controller = CreateController(MockSongLinkRequestFactory.self)
+    InitialView(controller: controller)
 }

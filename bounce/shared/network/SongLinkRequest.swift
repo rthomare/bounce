@@ -55,7 +55,7 @@ class MockSongLinkRequest: SongLinkRequest {
     }
     
     static func mockSong() throws -> SongResponse?  {
-        guard let url = Bundle.main.url(forResource: "sampleResponse2", withExtension: "json") else {
+        guard let url = Bundle.main.url(forResource: "sampleResponse", withExtension: "json") else {
             throw URLError(.badURL)
         }
         
@@ -73,7 +73,7 @@ class MockSongLinkRequest: SongLinkRequest {
     func resume() {
         // wait some time and then set the state to cached success
         self._loadingCallback?(songLink, self)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
             do {
                 let response = try MockSongLinkRequest.mockSong()!
                 loadSong(request: self, response: response) { song, error in
