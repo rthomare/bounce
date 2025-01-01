@@ -3,10 +3,10 @@
 import SwiftUI
 
 struct PlatformButton: View {
-    let receiveController: ReceiveController
     let platform: PlatformIdentifier
     let song: Song
     let expanded: Bool
+    let onPress: ((_ song: Song, _ platform: PlatformIdentifier) -> Void)
     
     @Environment(\.openURL) private var openURL
     @Environment(\.colorScheme) private var colorScheme
@@ -46,7 +46,7 @@ struct PlatformButton: View {
     
     var body: some View {
         Button(action: {
-            receiveController.selectPlatform(song: song, platform: platform)
+            onPress(song, platform)
         }) {
             Image(expanded ? imageExpanded : imageCompact)
                 .resizable()
@@ -70,48 +70,43 @@ struct PlatformButton: View {
     }
 }
 
-struct RoutedPlatformButton: View {
-    let receiveController: ReceiveController
-    let platform: PlatformIdentifier
-    let song: Song
-    let expanded: Bool
-    
-    var body: some View {
-        if let item = song.rawData.linksByPlatform.first(where: {
-            $0.key == platform.rawValue
-        }) {
-            PlatformButton(
-                receiveController: receiveController,
-                platform: platform,
-                song: song,
-                expanded: expanded
-            )
-        }
-    }
-}
-
 struct PlatformTray: View {
-    let receiveController: ReceiveController
     let song: Song
     let expanded: Bool
+    let onSelect: ((_ song: Song, _ platform: PlatformIdentifier) -> Void)
     
     var content: some View {
         Group {
-            RoutedPlatformButton(
-                receiveController: receiveController,
-                platform: .appleMusic,
-                song: song,
-                expanded: expanded)
-            RoutedPlatformButton(
-                receiveController: receiveController,
-                platform: .spotify,
-                song: song,
-                expanded: expanded)
-            RoutedPlatformButton(
-                receiveController: receiveController,
-                platform: .youtube,
-                song: song,
-                expanded: expanded)
+            if song.rawData.linksByPlatform.first(where: {
+                $0.key == PlatformIdentifier.appleMusic.rawValue
+            }) != nil {
+                PlatformButton(
+                    platform: .appleMusic,
+                    song: song,
+                    expanded: expanded,
+                    onPress: onSelect
+                )
+            }
+            if song.rawData.linksByPlatform.first(where: {
+                $0.key == PlatformIdentifier.spotify.rawValue
+            }) != nil {
+                PlatformButton(
+                    platform: .spotify,
+                    song: song,
+                    expanded: expanded,
+                    onPress: onSelect
+                )
+            }
+            if song.rawData.linksByPlatform.first(where: {
+                $0.key == PlatformIdentifier.youtube.rawValue
+            }) != nil {
+                PlatformButton(
+                    platform: .youtube,
+                    song: song,
+                    expanded: expanded,
+                    onPress: onSelect
+                )
+            }
         }
     }
     
@@ -139,13 +134,14 @@ struct PreviewPlatformTray: View {
     @State var isLoading = true
     @State var speed = 1.5
     var request = MockSongLinkRequestFactory.build(songLink: URL(filePath: "spotify:track:0Jcij1eWd5bDMU5iPbxe2i")!)
-    let controller = ReceiveController(MockSongLinkRequestFactory.self)
     
     var body: some View {
         if let song {
             Button("switch style to \(expanded ? "compact" : "expanded")") { expanded.toggle()
             }
-            PlatformTray(receiveController: controller, song: song, expanded: expanded).frame(maxHeight: expanded ? .infinity : 100)
+            PlatformTray(song: song, expanded: expanded) {song,platform in 
+                print(song, platform)
+            }.frame(maxHeight: expanded ? .infinity : 100)
         } else {
             LoaderView(isLoading: true, speed: 1.5).onAppear {
                 request.onSuccess { _song, _ in

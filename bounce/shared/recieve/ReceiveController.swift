@@ -12,12 +12,15 @@ enum RecieveState {
 
 enum RecieveActions {
     case loadSong(link: URL)
-    case selectSong(song: Song, platform: PlatformIdentifier)
+    case selectSong(song: Song, platform: PlatformIdentifier, preferred: Bool)
     case reset
 }
 
+let PLATFORM_PREFERENCE_KEY = "platform_perference"
+
 class ReceiveController: ObservableObject, RequestController {
     @Published var state: RecieveState = .idle
+    let sharedDefaults = UserDefaults(suiteName: "com.roti.bounce.shared")
     
     private var _songLinkRequestFactory: SongLinkRequestFactory.Type
     var openURL: OpenURLAction?
@@ -34,17 +37,25 @@ class ReceiveController: ObservableObject, RequestController {
             switch action {
             case .loadSong(link: let link):
                 let request = self._songLinkRequestFactory.build(songLink: link).onSuccess { [weak self] song, request in
-                    self?.state = .songLoaded(song: song, request: request)
+                    guard let self else { return }
+                    if let pref = PlatformIdentifier(rawValue: self.sharedDefaults?.string(forKey: PLATFORM_PREFERENCE_KEY) ?? "") {
+                        self.selectPlatform(song: song, platform: pref, preferred: false)
+                    } else {
+                        self.state = .songLoaded(song: song, request: request)
+                    }
                 }.onFailure { [weak self] error, request in
                     self?.state = .loadError(error: error, request: request)
                 }.onLoading { [weak self] url, request in
                     self?.state = .loadingSong(link: link, request: request)
                 }
                 request.resume()
-            case .selectSong(song: let song, platform: let platform):
+            case .selectSong(song: let song, platform: let platform, preferred: let preferred):
                 if let item = song.rawData.linksByPlatform.first(where: {
                     $0.key == platform.rawValue
                 }), let url = URL(string: item.value.nativeAppUriMobile ?? item.value.url) {
+                    if preferred {
+                        _storePreference(platform: platform)
+                    }
                     openURL?(url)
                 }
                 print ("selected song \(song), platform \(platform)")
@@ -52,6 +63,11 @@ class ReceiveController: ObservableObject, RequestController {
                 self.state = .idle
             }
         }
+    }
+    
+    private func _storePreference(platform: PlatformIdentifier) {
+        sharedDefaults?.set(platform.rawValue, forKey: PLATFORM_PREFERENCE_KEY)
+        sharedDefaults?.synchronize() // Ensure changes are written immediately
     }
     
     // MARK: Public Methods
@@ -72,8 +88,8 @@ class ReceiveController: ObservableObject, RequestController {
         }
     }
     
-    func selectPlatform(song: Song, platform: PlatformIdentifier) {
-        self._handleAction(.selectSong(song: song, platform: platform))
+    func selectPlatform(song: Song, platform: PlatformIdentifier, preferred: Bool) {
+        self._handleAction(.selectSong(song: song, platform: platform, preferred: preferred))
     }
     
     func reset () {

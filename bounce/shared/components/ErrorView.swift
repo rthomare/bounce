@@ -7,17 +7,19 @@ struct ErrorView: View {
     var error: Error
     
     var body: some View {
-        Text("something went wrong")
-            .font(.title)
-            .foregroundColor(Color.primary)
-            .fontWeight(.thin)
-        Button(action: {
-            requestController.retry()
-        }, label: {
-            Text("try again?")
-        })
+        VStack {
+            Text("something went wrong")
+                .font(.title)
+                .foregroundColor(Color.primary)
+                .fontWeight(.thin)
+            Button(action: {
+                requestController.retry()
+            }, label: {
+                Text("try again?")
+            })
             .font(.subheadline)
             .fontWeight(.medium)
+        }
     }
 }
 #Preview {

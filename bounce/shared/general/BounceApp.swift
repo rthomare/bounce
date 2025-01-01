@@ -6,8 +6,7 @@ struct BounceApp: View {
     @ObservedObject var appController: AppController
     @ObservedObject var createController: CreateController
     @ObservedObject var receiveController: ReceiveController
-    
-    @Environment(\.openURL) var openURL
+    var openURL: OpenURLAction?
     
     init(_ _appController: AppController) {
         appController = _appController

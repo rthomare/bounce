@@ -4,6 +4,7 @@ import SwiftUI
 
 struct ReceieveLoadedView: View {
     @ObservedObject var controller: ReceiveController
+    @State var isPreferred: Bool = false
     
     let song: Song
     
@@ -17,8 +18,24 @@ struct ReceieveLoadedView: View {
                     .foregroundColor(.secondary)
                     .font(expanded ? .title3 : .callout)
                     .padding(2)
-                PlatformTray(receiveController: controller, song: song, expanded: expanded)
-                if (expanded) { Spacer () }
+                PlatformTray(song: song, expanded: expanded) {song,platform in
+                    controller.selectPlatform(song: song, platform: platform, preferred: isPreferred)
+                }
+                if (expanded) {
+                    Spacer ()
+                    HStack {
+                        Button(action: {
+                            isPreferred.toggle()
+                        }) {
+                            Image(systemName: isPreferred ? "checkmark.square" : "square")
+                                .foregroundColor(.blue)
+                                .font(.system(size: 24))
+                        }
+                        Text("Auto-select this platform")
+                            .font(.headline)
+                    }.padding()
+                }
+                
             }.frame(maxWidth: .infinity)
         }
     }
