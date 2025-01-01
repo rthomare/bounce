@@ -50,10 +50,5 @@ struct ReceiveView: View {
 }
 
 #Preview {
-    let controller = ReceiveController(MockSongLinkRequestFactory.self)
-    VStack(alignment: .center) {
-        ReceiveView(controller: controller)
-    }.onAppear {
-        controller.loadSong(with: URL(string:"https://songlink.io/song/123456789")!)
-    }
+    PreviewBounce()
 }

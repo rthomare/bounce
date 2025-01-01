@@ -73,19 +73,5 @@ struct BounceApp: View {
 }
 
 #Preview {
-    let expanded: Bool = true
-    let createController = CreateController(MockSongLinkRequestFactory.self)
-    let receiveController = ReceiveController(MockSongLinkRequestFactory.self)
-    let appController = AppController(
-        createController: createController,
-        receiveController: receiveController)
-    VStack(alignment: .center) {
-        Text(expanded ? "Previewing expanded mode" : "Previewing collapsed mode").background(expanded ? Color.red : Color.blue).frame(maxWidth: .infinity, maxHeight: 25)
-        BounceApp(appController)
-    }.onAppear {
-        let song = SongAbridged(title: "", artistName: "", thumbnailUrl: URL(string: "https://example.com")!, requestPlatform: PlatformIdentifier.appleMusic, requestSongUrl: URL(string: "https://example.com")!)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            appController.handle(action: .recievingSong(song: song))
-        }
-    }.frame(maxHeight: expanded ? 500 : 300)
+    PreviewBounce()
 }
