@@ -20,7 +20,7 @@ enum SongSelectionType {
 }
 
 enum CreateFlowActions {
-    case startDetection
+    case startDetection(withSongUrl: String? = nil)
     case emptyDetection
     case dectectedSongUrl(songUrl: URL)
     case didLoadSong(song: Song, request: any SongLinkRequest)
@@ -61,9 +61,9 @@ class CreateController: ObservableObject, RequestController {
     
     private func _handleAction(_ action: CreateFlowActions) {
         switch action {
-            case .startDetection:
+            case .startDetection(withSongUrl: let url):
                 _setState(.detecting)
-                _detectSong()
+                _detectSong(overrideString: url)
             case .emptyDetection:
                 _setState(.idle)
             case .dectectedSongUrl(songUrl: let url):
@@ -125,9 +125,9 @@ class CreateController: ObservableObject, RequestController {
     }
     
     // check the pasteboard if it is a url is a songs link then update the state
-    @objc private func _detectSong() {
-        if let pasteboard = UIPasteboard.general.string {
-            if let url = ServiceMatcher.matches(pasteboard) ? URL(string: pasteboard) : nil {
+    @objc private func _detectSong(overrideString: String? = nil) {
+        if let songString = overrideString ?? UIPasteboard.general.string {
+            if let url = ServiceMatcher.matches(songString) ? URL(string: songString) : nil {
                 self._handleAction(.dectectedSongUrl(songUrl: url))
                 return
             }
@@ -148,7 +148,7 @@ class CreateController: ObservableObject, RequestController {
         self._handleAction(.emptyDetection)
     }
     
-    private func _start(hasMusicPermission: Bool) {
+    private func _start(hasMusicPermission: Bool, songUrl: String?) {
         if (hasMusicPermission) {
             _musicPlayer.beginGeneratingPlaybackNotifications()
             // Start observing notifications
@@ -161,27 +161,27 @@ class CreateController: ObservableObject, RequestController {
         }
         
         _notificationCenter.addObserver(self, selector: #selector(_detectSong), name: UIPasteboard.changedNotification, object: nil)
-        _handleAction(.startDetection)
+        _handleAction(.startDetection(withSongUrl: songUrl))
     }
     
     // MARK: Public Methods
     
-    func initialize() {
+    func initialize(withSongUrl: String? = nil) {
         MPMediaLibrary.requestAuthorization { [weak self] status in
             switch status {
             case .authorized:
-                self?._start(hasMusicPermission: true)
+                self?._start(hasMusicPermission: true, songUrl: withSongUrl)
             case .denied, .restricted, .notDetermined:
-                self?._start(hasMusicPermission: false)
+                self?._start(hasMusicPermission: false, songUrl: withSongUrl)
             @unknown default:
-                self?._start(hasMusicPermission: false)
+                self?._start(hasMusicPermission: false, songUrl: withSongUrl)
                 break
             }
         }
     }
     
-    @objc func detectSong() {
-        self._handleAction(.startDetection)
+    @objc func detectSong(with songUrl: String? = nil) {
+        self._handleAction(.startDetection(withSongUrl: songUrl))
         self.reset()
     }
     

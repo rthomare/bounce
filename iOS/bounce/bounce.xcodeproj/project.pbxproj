@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C178AA732D19BECD00DADBA0 /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C178AA5B2D19BE5200DADBA0 /* Messages.framework */; };
 		C178AA7F2D19BECE00DADBA0 /* messaging.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C178AA722D19BECD00DADBA0 /* messaging.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C1CDACAA2D25A51F007A860D /* sharing.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C1CDACA02D25A51F007A860D /* sharing.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +34,13 @@
 			remoteGlobalIDString = C178AA712D19BECD00DADBA0;
 			remoteInfo = messaging;
 		};
+		C1CDACA82D25A51F007A860D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C178AA172D19BDB200DADBA0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C1CDAC9F2D25A51F007A860D;
+			remoteInfo = sharing;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,6 +51,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				C178AA7F2D19BECE00DADBA0 /* messaging.appex in Embed Foundation Extensions */,
+				C1CDACAA2D25A51F007A860D /* sharing.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,6 +64,7 @@
 		C178AA392D19BDB300DADBA0 /* bounceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bounceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C178AA5B2D19BE5200DADBA0 /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = System/Library/Frameworks/Messages.framework; sourceTree = SDKROOT; };
 		C178AA722D19BECD00DADBA0 /* messaging.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = messaging.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1CDACA02D25A51F007A860D /* sharing.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = sharing.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -71,6 +81,13 @@
 				Info.plist,
 			);
 			target = C178AA712D19BECD00DADBA0 /* messaging */;
+		};
+		C1CDACAE2D25A51F007A860D /* Exceptions for "sharing" folder in "sharing" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C1CDAC9F2D25A51F007A860D /* sharing */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -106,6 +123,14 @@
 			path = shared;
 			sourceTree = "<group>";
 		};
+		C1CDACA12D25A51F007A860D /* sharing */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C1CDACAE2D25A51F007A860D /* Exceptions for "sharing" folder in "sharing" target */,
+			);
+			path = sharing;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +163,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C1CDAC9D2D25A51F007A860D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -149,6 +181,7 @@
 				C178AA322D19BDB300DADBA0 /* bounceTests */,
 				C178AA3C2D19BDB300DADBA0 /* bounceUITests */,
 				C178AA742D19BECD00DADBA0 /* messaging */,
+				C1CDACA12D25A51F007A860D /* sharing */,
 				C178AA5A2D19BE5200DADBA0 /* Frameworks */,
 				C178AA202D19BDB200DADBA0 /* Products */,
 			);
@@ -161,6 +194,7 @@
 				C178AA2F2D19BDB300DADBA0 /* bounceTests.xctest */,
 				C178AA392D19BDB300DADBA0 /* bounceUITests.xctest */,
 				C178AA722D19BECD00DADBA0 /* messaging.appex */,
+				C1CDACA02D25A51F007A860D /* sharing.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -189,6 +223,7 @@
 			);
 			dependencies = (
 				C178AA7E2D19BECE00DADBA0 /* PBXTargetDependency */,
+				C1CDACA92D25A51F007A860D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				C178AA212D19BDB200DADBA0 /* bounce */,
@@ -270,6 +305,29 @@
 			productReference = C178AA722D19BECD00DADBA0 /* messaging.appex */;
 			productType = "com.apple.product-type.app-extension.messages";
 		};
+		C1CDAC9F2D25A51F007A860D /* sharing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C1CDACAB2D25A51F007A860D /* Build configuration list for PBXNativeTarget "sharing" */;
+			buildPhases = (
+				C1CDAC9C2D25A51F007A860D /* Sources */,
+				C1CDAC9D2D25A51F007A860D /* Frameworks */,
+				C1CDAC9E2D25A51F007A860D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C178AA852D19BF7800DADBA0 /* shared */,
+				C1CDACA12D25A51F007A860D /* sharing */,
+			);
+			name = sharing;
+			packageProductDependencies = (
+			);
+			productName = sharing;
+			productReference = C1CDACA02D25A51F007A860D /* sharing.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -294,6 +352,9 @@
 					C178AA712D19BECD00DADBA0 = {
 						CreatedOnToolsVersion = 16.2;
 					};
+					C1CDAC9F2D25A51F007A860D = {
+						CreatedOnToolsVersion = 16.2;
+					};
 				};
 			};
 			buildConfigurationList = C178AA1A2D19BDB200DADBA0 /* Build configuration list for PBXProject "bounce" */;
@@ -314,6 +375,7 @@
 				C178AA2E2D19BDB300DADBA0 /* bounceTests */,
 				C178AA382D19BDB300DADBA0 /* bounceUITests */,
 				C178AA712D19BECD00DADBA0 /* messaging */,
+				C1CDAC9F2D25A51F007A860D /* sharing */,
 			);
 		};
 /* End PBXProject section */
@@ -341,6 +403,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C178AA702D19BECD00DADBA0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C1CDAC9E2D25A51F007A860D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -378,6 +447,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C1CDAC9C2D25A51F007A860D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -395,6 +471,11 @@
 			isa = PBXTargetDependency;
 			target = C178AA712D19BECD00DADBA0 /* messaging */;
 			targetProxy = C178AA7D2D19BECE00DADBA0 /* PBXContainerItemProxy */;
+		};
+		C1CDACA92D25A51F007A860D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C1CDAC9F2D25A51F007A860D /* sharing */;
+			targetProxy = C1CDACA82D25A51F007A860D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -702,6 +783,56 @@
 			};
 			name = Release;
 		};
+		C1CDACAC2D25A51F007A860D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CYGW5D8K45;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = sharing/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = sharing;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.roti.bounce.sharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C1CDACAD2D25A51F007A860D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CYGW5D8K45;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = sharing/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = sharing;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.roti.bounce.sharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -746,6 +877,15 @@
 			buildConfigurations = (
 				C178AA822D19BECE00DADBA0 /* Debug */,
 				C178AA832D19BECE00DADBA0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C1CDACAB2D25A51F007A860D /* Build configuration list for PBXNativeTarget "sharing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C1CDACAC2D25A51F007A860D /* Debug */,
+				C1CDACAD2D25A51F007A860D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

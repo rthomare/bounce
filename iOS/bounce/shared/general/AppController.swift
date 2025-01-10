@@ -12,7 +12,7 @@ enum AppSurface {
 
 enum AppAction {
     case reset
-    case startCreation
+    case startCreation(forUrl: String? = nil)
     case recievingSong(song: SongAbridged)
 }
 
@@ -36,10 +36,10 @@ class AppController : ObservableObject {
         switch action {
         case .reset:
             surface = .home
-        case .startCreation:
+        case .startCreation(forUrl: let url):
             switch self.createController.state {
             case .initializing:
-                self.createController.initialize()
+                self.createController.initialize(withSongUrl: url)
                 break
             case .detecting, .idle, .loadError(error: _, request: _), .loadingSong(link: _, request: _), .songLoaded(song: _, request: _):
                 break //no - op

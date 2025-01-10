@@ -32,7 +32,6 @@ struct PreviewBounce: View {
     }
 }
 
-
 #Preview {
     PreviewBounce()
 }

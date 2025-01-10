@@ -84,7 +84,7 @@ class MessagesViewController: MSMessagesAppViewController {
             _appController?.handle(action: .recievingSong(song: song))
             requestPresentationStyle(.expanded)
         } else {
-            _appController?.handle(action: .startCreation)
+            _appController?.handle(action: .startCreation())
             requestPresentationStyle(.compact)
         }
     }

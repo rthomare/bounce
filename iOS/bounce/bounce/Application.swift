@@ -15,7 +15,7 @@ struct Application: App {
     var body: some Scene {
         WindowGroup {
             BounceApp(appController).onAppear {
-                appController.handle(action: .startCreation)
+                appController.handle(action: .startCreation())
             }
         }
     }
