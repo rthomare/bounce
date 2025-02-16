@@ -1,5 +1,7 @@
 //  Created by Rohan Thomare on 12/26/24.
 
+import Foundation
+
 // Array of random strings to use
 let songRotation = [
     "https://music.apple.com/us/album/grin/1752503959?i=1752503962",
@@ -14,3 +16,6 @@ let songRotation = [
     "https://music.apple.com/us/album/hello-miss-johnson/1780429542?i=1780429748",
     "https://music.apple.com/us/album/rock/1772783959?i=1772783961",
 ]
+
+// TODO: Add in Billboard hot random fetch
+let billboardURL = URL(string: "https://raw.githubusercontent.com/KoreanThinker/billboard-json/main/billboard-hot-100/recent.json")
