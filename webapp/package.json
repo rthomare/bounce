@@ -3,7 +3,11 @@
   "private": true,
   "version": "0.0.0-alpha.1",
   "type": "module",
-  "homepage": "https://<your-username>.github.io/<your-repo-name>",
+  "homepage": "https://rthomare.github.io/bounce",
+  "author": {
+    "name": "Rohit Thomare",
+    "url": "https://rthomare.github.io"
+  },
   "scripts": {
     "dev": "vite",
     "add-domain": "echo \"rthree.xyz\" > dist/CNAME",
