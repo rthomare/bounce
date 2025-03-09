@@ -1,6 +1,5 @@
 "use client";
 import {
-  Button,
   Center,
   Heading,
   HStack,
@@ -70,10 +69,10 @@ function SongMatchInner({ songUrl }: { songUrl: string }) {
         </Stack>
         <HStack w="100%" justifyContent="space-evenly" px={8} gap={8} mt={4}>
           <Link href={songLinks.spotify.url}>
-            <Image h="50px" src="/spotify.png" />
+            <Image h="50px" src="/spotify.png" alt="spotify" />
           </Link>
           <Link href={songLinks.appleMusic.url}>
-            <Image h="50px" src="/am-white.svg" />
+            <Image h="50px" src="/am-white.svg" alt="apple music" />
           </Link>
         </HStack>
       </VStack>

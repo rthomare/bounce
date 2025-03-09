@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import type { SpanProps } from '@chakra-ui/react';
-import { Span } from '@chakra-ui/react';
-import { ThemeProviderProps, ThemeProvider, useTheme } from 'next-themes';
-import * as React from 'react';
+import type { SpanProps } from "@chakra-ui/react";
+import { Span } from "@chakra-ui/react";
+import { ThemeProviderProps, ThemeProvider, useTheme } from "next-themes";
+import * as React from "react";
 
-export interface ColorModeProviderProps extends ThemeProviderProps {}
+export type ColorModeProviderProps = ThemeProviderProps;
 
 export function ColorModeProvider(props: ColorModeProviderProps) {
   return (
@@ -13,7 +13,7 @@ export function ColorModeProvider(props: ColorModeProviderProps) {
   );
 }
 
-export type ColorMode = 'light' | 'dark';
+export type ColorMode = "light" | "dark";
 
 export interface UseColorModeReturn {
   colorMode: ColorMode;
@@ -24,7 +24,7 @@ export interface UseColorModeReturn {
 export function useColorMode(): UseColorModeReturn {
   const { resolvedTheme, setTheme } = useTheme();
   const toggleColorMode = () => {
-    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
   return {
     colorMode: resolvedTheme as ColorMode,
@@ -35,7 +35,7 @@ export function useColorMode(): UseColorModeReturn {
 
 export function useColorModeValue<T>(light: T, dark: T) {
   const { colorMode } = useColorMode();
-  return colorMode === 'dark' ? dark : light;
+  return colorMode === "dark" ? dark : light;
 }
 
 export const LightMode = React.forwardRef<HTMLSpanElement, SpanProps>(
