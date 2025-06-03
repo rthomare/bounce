@@ -1,5 +1,7 @@
 import SongDisplay from "./content";
 import type { Metadata } from "next";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 type Props = {
   params: Promise<{
@@ -53,6 +55,23 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: Props) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // With SSR, we usually want to set some default staleTime
+            // above 0 to avoid refetching immediately on the client
+            staleTime: 60 * 1000,
+          },
+        },
+      })
+  );
+
   const { songUrl } = await params;
-  return <SongDisplay songUrl={songUrl} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SongDisplay songUrl={songUrl} />
+    </QueryClientProvider>
+  );
 }

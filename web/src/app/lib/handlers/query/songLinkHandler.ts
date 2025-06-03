@@ -42,3 +42,7 @@ export interface Song {
   platformEntityUrl: string;
   rawData: SongResponse;
 }
+
+// Assumes url encoded songUrl
+export const songLinkRequestUrl = (songUrl: string) =>
+  `https://api.song.link/v1-alpha.1/links?userCountry=US&songIfSingle=true&url=${songUrl}`;

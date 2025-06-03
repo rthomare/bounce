@@ -1,0 +1,49 @@
+enum Platform {
+  SPOTIFY
+  APPLE_MUSIC
+}
+
+type PlatformLink {
+  country: String!
+  url: String!
+  mobileAppURI: String
+  desktopAppURI: String
+  platform: Platform!
+}
+
+type Song {
+  isrc: String!
+  title: String!
+  artist: String!
+  coverArtUrl: String
+  platformLinks: [PlatformLink]
+}
+
+type Playlist {
+  id: ID!
+  name: String!
+  description: String!
+  songs: [Song!]
+  created_at: String!
+  updated_at: String!
+}
+
+input PlaylistInput {
+  name: String!
+  description: String
+  songUrl: String
+}
+
+type Query {
+  matchSong(url: String!): Song
+  playlist(id: ID!): Playlist
+  playlists: [Playlist!]!
+}
+
+type Mutation {
+  createPlaylist(input: PlaylistInput!): Playlist!
+  updatePlaylist(id: ID!, input: PlaylistInput!): Playlist!
+  deletePlaylist(id: ID!): Boolean!
+  addSongToPlaylistByUrl(playlistId: ID!, url: String!): Playlist!
+  removeSongFromPlaylist(playlistId: ID!, isrc: String!): Playlist!
+}

@@ -9,9 +9,10 @@ import {
   Stack,
   VStack,
 } from "@chakra-ui/react";
-import { useSongMatchData } from "@/hooks/fetchSongData";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ClientUIProvider } from "@/components/ui/provider";
+import { useFetchMatch } from "@/app/lib/hooks/useFetchMatch";
+import { Platform } from "@/types/__generated__/resolvers-types";
 
 const queryClient = new QueryClient();
 
@@ -26,12 +27,9 @@ export default function Content({ songUrl }: { songUrl: string }) {
 }
 
 function SongMatchInner({ songUrl }: { songUrl: string }) {
-  const { isPending, error, data: song } = useSongMatchData({ songUrl });
+  const { isPending, error, data: song } = useFetchMatch({ songUrl });
   if (isPending) return <Spinner />;
   if (error) return "An error has occurred: " + error.message;
-  const songLinks = song.rawData.linksByPlatform;
-  const youtubeId =
-    song.rawData.linksByPlatform.youtube.entityUniqueId.split("::")[1];
   return (
     <Center w="100%" h="100vh">
       <VStack>
@@ -39,11 +37,9 @@ function SongMatchInner({ songUrl }: { songUrl: string }) {
           shadow="textColor"
           borderRadius="20px"
           overflow="hidden"
-          backgroundImage={`url(${song.thumbnailUrl})`}
+          backgroundImage={`url(${song.coverArtUrl})`}
           backgroundSize="cover"
           backgroundPosition="center"
-          w={song.thumbnailWidth}
-          h={song.thumbnailHeight}
           gap={0}
         >
           <iframe
@@ -51,7 +47,7 @@ function SongMatchInner({ songUrl }: { songUrl: string }) {
               width: "100%",
               height: "100%",
             }}
-            src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1`}
+            // src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1`}
           />
           <VStack
             zIndex={1}
@@ -63,15 +59,26 @@ function SongMatchInner({ songUrl }: { songUrl: string }) {
           >
             <Heading zIndex={1}>{song.title}</Heading>
             <Heading zIndex={1} size="sm">
-              {song.artistName}
+              {song.artist}
             </Heading>
           </VStack>
         </Stack>
         <HStack w="100%" justifyContent="space-evenly" px={8} gap={8} mt={4}>
-          <Link href={songLinks.spotify.url}>
+          <Link
+            href={
+              song.platformLinks?.find((a) => a?.platform === Platform.Spotify)
+                ?.url
+            }
+          >
             <Image h="50px" src="/spotify.png" alt="spotify" />
           </Link>
-          <Link href={songLinks.appleMusic.url}>
+          <Link
+            href={
+              song.platformLinks?.find(
+                (a) => a?.platform === Platform.AppleMusic
+              )?.url
+            }
+          >
             <Image h="50px" src="/am-white.svg" alt="apple music" />
           </Link>
         </HStack>
