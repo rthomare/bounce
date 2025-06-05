@@ -1,5 +1,55 @@
 import { Platform, Song } from "@/types/__generated__/resolvers-types";
-import { songLinkRequestUrl, SongResponse } from "./songLinkHandler";
+
+interface SongLinkEntity {
+  id: string;
+  type: string;
+  title: string;
+  artistName: string;
+  thumbnailUrl: string;
+  thumbnailWidth: number;
+  thumbnailHeight: number;
+  apiProvider: string;
+  platforms: string[]; // Updated to use PlatformIdentifier;
+}
+
+export enum SongLinkSupportedPlatforms {
+  YOUTUBE = "youtube",
+  SPOTIFY = "spotify",
+  APPLEMUSIC = "appleMusic",
+}
+
+export interface SongLinkPlatformLink {
+  country: string;
+  url: string;
+  nativeAppUriMobile?: string;
+  nativeAppUriDesktop?: string;
+  entityUniqueId: string;
+}
+
+export interface SongLinkResponse {
+  entityUniqueId: string;
+  userCountry: string;
+  pageUrl: string;
+  entitiesByUniqueId: { [key: string]: SongLinkEntity };
+  linksByPlatform: {
+    [key in SongLinkSupportedPlatforms]: SongLinkPlatformLink;
+  };
+}
+
+export interface SongLinkSong {
+  title: string;
+  artistName: string;
+  thumbnailUrl: string;
+  thumbnailWidth: number;
+  thumbnailHeight: number;
+  platform: string;
+  platformEntityUrl: string;
+  rawData: SongLinkResponse;
+}
+
+// Assumes url encoded songUrl
+export const songLinkRequestUrl = (songUrl: string) =>
+  `https://api.song.link/v1-alpha.1/links?userCountry=US&songIfSingle=true&url=${songUrl}`;
 
 export const matchSong = async (
   _: any,
@@ -8,7 +58,7 @@ export const matchSong = async (
   const fetchUrl = songLinkRequestUrl(url!);
   return fetch(fetchUrl).then(async (res) => {
     if (!res.ok) throw new Error("Failed to fetch song data");
-    const songData = (await res.json()) as SongResponse;
+    const songData = (await res.json()) as SongLinkResponse;
     // Check if the response is valid
     if (!songData || !songData.entityUniqueId) {
       throw new Error("Invalid song data");

@@ -44,6 +44,6 @@ type Mutation {
   createPlaylist(input: PlaylistInput!): Playlist!
   updatePlaylist(id: ID!, input: PlaylistInput!): Playlist!
   deletePlaylist(id: ID!): Boolean!
-  addSongToPlaylistByUrl(playlistId: ID!, url: String!): Playlist!
+  addSongToPlaylist(playlistId: ID!, url: String!): Playlist!
   removeSongFromPlaylist(playlistId: ID!, isrc: String!): Playlist!
 }

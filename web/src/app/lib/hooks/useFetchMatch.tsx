@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { matchSong } from "../handlers/query/song";
+import { matchSong } from "../handlers/song";
 
 export const useFetchMatch = ({ songUrl }: { songUrl: string }) => {
   return useQuery({
