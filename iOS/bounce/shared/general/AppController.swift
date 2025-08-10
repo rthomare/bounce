@@ -1,7 +1,7 @@
 //  Created by Rohan Thomare on 12/29/24.
 
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 enum AppSurface {
     case loading

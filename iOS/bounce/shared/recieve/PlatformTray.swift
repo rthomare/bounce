@@ -144,7 +144,7 @@ struct PreviewPlatformTray: View {
             }.frame(maxHeight: expanded ? .infinity : 100)
         } else {
             LoaderView(isLoading: true, speed: 1.5).onAppear {
-                request.onSuccess { _song, _ in
+                let _ = request.onSuccess { _song, _ in
                     song = _song
                 }
                 request.resume()

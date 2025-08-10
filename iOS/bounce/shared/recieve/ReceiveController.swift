@@ -1,7 +1,7 @@
 //  Created by Rohan Thomare on 12/23/24.
 
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 enum RecieveState {
     case idle
