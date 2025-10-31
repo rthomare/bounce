@@ -2,6 +2,8 @@
 
 import SwiftUI
 
+let EXPANED_HEIGHT: CGFloat = 450
+
 struct ReceieveLoadedView: View {
     @ObservedObject var controller: ReceiveController
     @State var isPreferred: Bool = false
@@ -10,10 +12,10 @@ struct ReceieveLoadedView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            let expanded = geometry.size.height > 400
+            let expanded = geometry.size.height > EXPANED_HEIGHT
             VStack(spacing:0) {
                 if (expanded) { Spacer () }
-                SongEntityView(song: song)
+                SongEntityView(song: song).animation(.easeInOut, value: expanded)
                 Text("choose your platform")
                     .foregroundColor(.secondary)
                     .font(expanded ? .title3 : .callout)

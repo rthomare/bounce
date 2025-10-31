@@ -6,13 +6,11 @@ struct BounceApp: View {
     @ObservedObject var appController: AppController
     @ObservedObject var createController: CreateController
     @ObservedObject var receiveController: ReceiveController
-    var openURL: OpenURLAction?
     
     init(_ _appController: AppController) {
         appController = _appController
         createController = _appController.createController
         receiveController = _appController.receiveController
-        receiveController.openURL = openURL
     }
     
     var showLoading: Bool {

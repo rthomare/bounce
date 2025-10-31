@@ -36,6 +36,19 @@ struct PlatformButton: View {
         }
     }
     
+    
+    var revealW: CGFloat? {
+        if (expanded) {
+            return nil
+        }
+        switch platform {
+            case .appleMusic: return 40
+            case .spotify: return 45
+            case .youtube: return 50
+        }
+    }
+    
+    
     var imageVerticalPadding: CGFloat {
         switch platform {
             case .appleMusic: return expanded ? 8 : 0
@@ -48,11 +61,12 @@ struct PlatformButton: View {
         Button(action: {
             onPress(song, platform)
         }) {
-            Image(expanded ? imageExpanded : imageCompact)
+            Image(imageExpanded)
                 .resizable()
-                .scaledToFit()
-                .frame(maxHeight: imageHeight)
-                .animation(.easeInOut(duration: 0.4), value: expanded)
+                .aspectRatio(contentMode: expanded ? .fit : .fill)
+                .frame(maxWidth: revealW, maxHeight: imageHeight, alignment: .leading)
+                .clipped()
+                .contentTransition(.interpolate)
         }
         .buttonStyle(PlainButtonStyle())
         .simultaneousGesture(
@@ -111,19 +125,17 @@ struct PlatformTray: View {
     }
     
     var body: some View {
-        Group {
-            if expanded {
-                VStack(alignment: .center, spacing: 10) {
-                    content
-                }
-            } else {
-                HStack(alignment: .center, spacing: 20) {
-                    Spacer()
-                    content
-                    Spacer()
-                }
-            }
-        }.animation(.easeInOut, value: expanded) // Smooth transition
+        let layout = expanded
+        ? AnyLayout(VStackLayout(alignment: .center, spacing: 10))
+        : AnyLayout(HStackLayout(alignment: .center, spacing: 20))
+
+        layout {
+            content
+        }
+        // Animate layout changes (position & size) when axis flips.
+        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: expanded)
+        // Optional: makes resizing feel smoother on iOS 17+
+        .contentTransition(.interpolate)
     }
     
 }

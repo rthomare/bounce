@@ -23,10 +23,12 @@ class ReceiveController: ObservableObject, RequestController {
     let sharedDefaults = UserDefaults(suiteName: "com.roti.bounce.shared")
     
     private var _songLinkRequestFactory: SongLinkRequestFactory.Type
-    var openURL: OpenURLAction?
+    var _openURL: (URL) -> Void?
     
-    init(_ factory: SongLinkRequestFactory.Type) {
+    
+    init(_ factory: SongLinkRequestFactory.Type, openURL: @escaping (URL) -> Void) {
         _songLinkRequestFactory = factory
+        _openURL = openURL
     }
     
     // MARK: Private Methods
@@ -56,7 +58,7 @@ class ReceiveController: ObservableObject, RequestController {
                     if preferred {
                         _storePreference(platform: platform)
                     }
-                    openURL?(url)
+                    _openURL(url)
                 }
                 print ("selected song \(song), platform \(platform)")
             case .reset:

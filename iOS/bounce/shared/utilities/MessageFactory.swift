@@ -69,6 +69,14 @@ class MessageFactory {
         return message;
     }
     
+    static func universalLink(for song: Song) -> URL? {
+        guard let messageURL = URL.from(baseURL: "https://bounce.io", parameters: song.abridged()) else {
+            print("Failed to create message URL")
+            return nil
+        }
+        return messageURL
+    }
+    
     static func getSongFromMessage(_ message: MSMessage) -> SongAbridged? {
         let url = message.url
         do {
