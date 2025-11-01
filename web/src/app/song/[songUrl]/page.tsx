@@ -1,7 +1,6 @@
 import SongDisplay from "./content";
 import type { Metadata } from "next";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 
 type Props = {
   params: Promise<{
