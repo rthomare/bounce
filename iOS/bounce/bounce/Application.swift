@@ -14,7 +14,9 @@ struct Application: App {
 
     var body: some Scene {
         WindowGroup {
-            BounceApp(appController).onAppear {
+            BounceApp(appController).onOpenURL(perform: { URL in
+                appController.handle(action: .openURL(url: URL))
+            }).onAppear {
                 appController.handle(action: .startCreation())
             }
         }

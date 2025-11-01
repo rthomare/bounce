@@ -1,7 +1,7 @@
 //  Created by Rohan Thomare on 12/29/24.
 
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 enum AppSurface {
     case loading
@@ -14,22 +14,27 @@ enum AppAction {
     case reset
     case startCreation(forUrl: String? = nil)
     case recievingSong(song: SongAbridged)
+    case openURL(url: URL)
 }
 
 class AppController : ObservableObject {
     @ObservedObject var createController: CreateController
     @ObservedObject var receiveController: ReceiveController
     @Published var surface: AppSurface = .loading
+    var openURL: ((URL) -> Void)?
     
     static func defaultFactory(onSongSelected: @escaping ((Song, SongSelectionType) -> Void), openURL: @escaping ((URL) -> Void)) -> AppController {
-        return AppController(
+        let ac = AppController(
             createController: CreateController(DefaultSongLinkRequestFactory.self, onSongSelected: onSongSelected),
-            receiveController: ReceiveController(DefaultSongLinkRequestFactory.self))
+            receiveController: ReceiveController(DefaultSongLinkRequestFactory.self, openURL: openURL),
+            openURL: openURL)
+        return ac;
     }
     
-    init(createController: CreateController, receiveController: ReceiveController) {
+    init(createController: CreateController, receiveController: ReceiveController, openURL: ((URL) -> Void)? = nil) {
         self.createController = createController
         self.receiveController = receiveController
+        self.openURL = openURL
     }
     
     func handle(action: AppAction) {
@@ -48,6 +53,8 @@ class AppController : ObservableObject {
         case .recievingSong(song: let song):
             surface = .recieve(song: song)
             self.receiveController.loadSong(with: song.requestSongUrl)
+        case .openURL(url: let url):
+            self.openURL?(url)
         }
     }
 }

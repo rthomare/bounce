@@ -18,8 +18,8 @@ class ShareViewController: SLComposeServiceViewController {
             if let message = MessageFactory.buildSongMessage(song) {
                 self.shareViaMessages(message)
             }
-        }, openURL: {
-            _ in
+        }, openURL: { URL in
+            self.extensionContext?.open(URL)
         })
         let contentView = BounceApp(appController)
         hostingController = UIHostingController(rootView: contentView)
@@ -122,9 +122,12 @@ extension ShareViewController: MFMessageComposeViewControllerDelegate {
             return
         }
 
+        // BREAD CRUMB
+//        MessageFactory.buildSongMessage(message)
         let messageComposeVC = MFMessageComposeViewController()
         messageComposeVC.message = message
-        messageComposeVC.body = "hello world"
+        let song = MessageFactory.getSongFromMessage(message)
+        messageComposeVC.body = song?.requestSongUrl.absoluteString ?? "No song selected"
         messageComposeVC.messageComposeDelegate = self
 
         // Present the view controller
