@@ -19,3 +19,11 @@ artist: string
 title: string
 album: string
 artwork_url: string
+
+# Song Listens
+
+id: string
+song_share_id: string
+listened_at: datetime
+user_id: string
+device_type: string

@@ -1,6 +1,12 @@
 import Image from "next/image";
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const { data: todos } = await supabase.from("todos").select();
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
@@ -16,6 +22,15 @@ export default function Home() {
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             To get started, edit the page.tsx file.
           </h1>
+          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+            Supabase Todos: <p>{todos?.length ?? 0}</p>
+          </h1>
+
+          <ul>
+            {todos?.map((todo) => (
+              <li>{todo}</li>
+            ))}
+          </ul>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Looking for a starting point or more instructions? Head over to{" "}
             <a
