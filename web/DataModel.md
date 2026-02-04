@@ -1,16 +1,19 @@
 # User Model
 
-uid: string
+id: string
 service_credenitals: ServiceCredential[]
 song_shares: SongShare[]
 
-# Service Crential
+# Service Credential
 
 user_id: string
 service: string
 service_user_id: string
+access_token: string
+refresh_token: string
+token_expiry: datetime
 
-# Song Share
+# Bounce
 
 id: string
 url: string
@@ -20,10 +23,18 @@ title: string
 album: string
 artwork_url: string
 
-# Song Listens
+# Bounce Listen
 
 id: string
-song_share_id: string
+bounce_id: string
 listened_at: datetime
 user_id: string
 device_type: string
+
+# Activity Log
+
+id: string
+user_id: string
+activity_type: string
+activity_data: json
+created_at: datetime

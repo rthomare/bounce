@@ -5,7 +5,21 @@ import { cookies } from "next/headers";
 export default async function Home() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
-  const { data: todos } = await supabase.from("todos").select();
+  const { data: todos } = await supabase.from("TODOs").select();
+
+  const createTodo = async () => {
+    "use server";
+    // do a random async function
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
+    console.log("Creating todo...");
+    console.log("Supabase client created", supabase);
+    const result = await supabase
+      .from("TODOs")
+      .insert({ title: "New Todo" })
+      .select();
+    console.log("Todo created", result);
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
@@ -28,9 +42,15 @@ export default async function Home() {
 
           <ul>
             {todos?.map((todo) => (
-              <li>{todo}</li>
+              <li key={todo.id}>{todo.title}</li>
             ))}
           </ul>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={createTodo}
+          >
+            Create Todo
+          </button>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Looking for a starting point or more instructions? Head over to{" "}
             <a
