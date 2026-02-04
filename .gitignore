@@ -64,3 +64,5 @@ fastlane/test_output
 xcshareddata
 
 .DS_Store
+
+.env*
